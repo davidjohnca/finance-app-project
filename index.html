@@ -22,22 +22,31 @@
   <style>
     :root {
       --sat: env(safe-area-inset-top, 54px);
-      --sab: env(safe-area-inset-bottom, 0px);
+      --sab: env(safe-area-inset-bottom, 20px);
+      --sal: env(safe-area-inset-left, 0px);
+      --sar: env(safe-area-inset-right, 0px);
     }
+    
     html, body {
       background-color: #000000;
       margin: 0;
       padding: 0;
       min-height: 100vh;
       min-height: -webkit-fill-available;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
     }
+
     input, select, button, textarea {
+      font-family: inherit;
       user-select: auto;
       -webkit-user-select: auto;
     }
+
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -45,8 +54,23 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    /* iOS Native Layout Padding Classes */
     .ios-safe-header {
-      padding-top: max(env(safe-area-inset-top), 60px);
+      padding-top: max(env(safe-area-inset-top), 54px);
+      padding-left: max(env(safe-area-inset-left), 16px);
+      padding-right: max(env(safe-area-inset-right), 16px);
+    }
+
+    .ios-safe-container {
+      padding-left: max(env(safe-area-inset-left), 16px);
+      padding-right: max(env(safe-area-inset-right), 16px);
+    }
+
+    .ios-safe-bottom {
+      padding-bottom: max(env(safe-area-inset-bottom), 12px);
+      padding-left: max(env(safe-area-inset-left), 12px);
+      padding-right: max(env(safe-area-inset-right), 12px);
     }
   </style>
 </head>
@@ -150,19 +174,19 @@
                 <button
                   key={d.month}
                   onClick={() => onSelectMonth(d.month)}
-                  className={`flex flex-col items-center space-y-1 group transition-all ${isSelected ? 'scale-105' : 'opacity-60 hover:opacity-100'}`}
+                  className={`flex flex-col items-center space-y-1 group active:scale-95 transition-all ${isSelected ? 'scale-105' : 'opacity-60 hover:opacity-100'}`}
                 >
                   <div className="flex items-end space-x-0.5 h-24">
                     <div 
                       style={{ height: `${incHeight}px` }} 
-                      className={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-emerald-500 shadow-md shadow-emerald-500/30' : 'bg-emerald-500/50'}`}
+                      className={`w-2.5 rounded-t-sm transition-all ${isSelected ? 'bg-emerald-500 shadow-md shadow-emerald-500/30' : 'bg-emerald-500/50'}`}
                     ></div>
                     <div 
                       style={{ height: `${expHeight}px` }} 
-                      className={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-rose-500 shadow-md shadow-rose-500/30' : 'bg-rose-500/50'}`}
+                      className={`w-2.5 rounded-t-sm transition-all ${isSelected ? 'bg-rose-500 shadow-md shadow-rose-500/30' : 'bg-rose-500/50'}`}
                     ></div>
                   </div>
-                  <span className={`text-[9px] font-bold ${isSelected ? (isDark ? 'text-blue-400 font-black' : 'text-blue-600 font-black') : (isDark ? 'text-slate-400' : 'text-slate-500')}`}>
+                  <span className={`text-[9px] font-extrabold ${isSelected ? (isDark ? 'text-blue-400 font-black' : 'text-blue-600 font-black') : (isDark ? 'text-slate-400' : 'text-slate-500')}`}>
                     {d.month.substring(0, 3)}
                   </span>
                 </button>
@@ -269,7 +293,7 @@
         return initial;
       });
 
-      // Synchronize document body background and status bar meta color
+      // Synchronize body background & status bar meta color
       useEffect(() => {
         const themeBg = isDark ? '#000000' : '#f2f2f7';
         document.body.style.backgroundColor = themeBg;
@@ -411,23 +435,27 @@
         setEditModal(null);
       };
 
-      // Theme-based dynamic style helper classes
+      // Native iOS Styling Classes
       const bgTheme = isDark ? "bg-[#000000] text-slate-100" : "bg-[#f2f2f7] text-slate-900";
-      const cardTheme = isDark ? "bg-zinc-900/80 border-zinc-800/80 shadow-lg" : "bg-white/80 border-slate-200/80 shadow-sm";
-      const cardAccentTheme = isDark ? "bg-gradient-to-tr from-zinc-900 to-zinc-900/90 border-blue-500/30" : "bg-gradient-to-tr from-white to-slate-50 border-blue-400/40 shadow-md";
-      const headerTheme = isDark ? "bg-[#000000]/95 border-zinc-800/80" : "bg-[#f2f2f7]/95 border-slate-200/80";
+      const cardTheme = isDark 
+        ? "bg-zinc-900/90 border-white/10 shadow-lg shadow-black/40 rounded-[22px]" 
+        : "bg-white/90 border-black/5 shadow-sm rounded-[22px]";
+      const cardAccentTheme = isDark 
+        ? "bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border-blue-500/30 shadow-xl shadow-blue-500/5 rounded-[22px]" 
+        : "bg-gradient-to-br from-white via-slate-50 to-blue-50/20 border-blue-300/50 shadow-md rounded-[22px]";
+      const headerTheme = isDark ? "bg-[#000000]/80 border-zinc-800/80" : "bg-[#f2f2f7]/80 border-slate-200/80";
 
       return (
         <div 
-          className={`min-h-screen max-w-md mx-auto ${bgTheme} flex flex-col transition-colors duration-300`}
-          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 5rem)' }}
+          className={`min-h-screen max-w-md landscape:max-w-5xl md:max-w-4xl mx-auto ${bgTheme} flex flex-col transition-colors duration-300`}
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 5rem)' }}
         >
           
-          {/* iOS Sticky Header with Notch Safe-Area Top Offset */}
-          <header className={`sticky top-0 z-40 backdrop-blur-xl border-b ${headerTheme} px-4 pb-3 ios-safe-header`}>
-            <div className="flex items-center justify-between mb-3 pt-2">
+          {/* iOS Sticky Header with Safe Area Notch Offset */}
+          <header className={`sticky top-0 z-40 backdrop-blur-2xl border-b ${headerTheme} ios-safe-header transition-all`}>
+            <div className="flex items-center justify-between mb-3 pt-1">
               <div className="flex items-center space-x-2.5">
-                <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-md shadow-blue-500/20">
+                <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-md shadow-blue-500/20 active:scale-95 transition-transform">
                   <Icon name="wallet" size={20} />
                 </div>
                 <div>
@@ -440,7 +468,7 @@
                 {/* Light/Dark Toggle */}
                 <button
                   onClick={() => setIsDark(!isDark)}
-                  className={`p-2 rounded-xl border transition-all ${
+                  className={`p-2 rounded-xl border active:scale-95 transition-all ${
                     isDark 
                       ? 'bg-zinc-800/80 text-amber-400 border-zinc-700/80 hover:bg-zinc-700' 
                       : 'bg-slate-200/80 text-slate-700 border-slate-300 hover:bg-slate-300'
@@ -453,7 +481,7 @@
                 <select 
                   value={selectedYear} 
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className={`text-xs font-black px-3 py-2 rounded-xl border outline-none ${
+                  className={`text-xs font-black px-3 py-2 rounded-xl border outline-none active:scale-95 transition-transform ${
                     isDark 
                       ? 'bg-zinc-900 text-blue-400 border-blue-500/30' 
                       : 'bg-white text-blue-600 border-blue-300 shadow-sm'
@@ -468,17 +496,17 @@
             </div>
 
             {/* iOS Segmented Month Selector Bar */}
-            <div className="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
+            <div className="flex space-x-1 overflow-x-auto no-scrollbar py-1 px-1 bg-zinc-950/40 rounded-2xl border border-white/5">
               {MONTH_NAMES.map(m => (
                 <button
                   key={m}
                   onClick={() => setSelectedMonth(m)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap active:scale-95 transition-all duration-200 ${
                     selectedMonth === m 
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-105' 
+                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-[1.02]' 
                       : isDark 
-                        ? 'bg-zinc-900/80 text-slate-400 hover:bg-zinc-800 border border-zinc-800' 
-                        : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80 shadow-sm'
+                        ? 'text-slate-400 hover:text-slate-200' 
+                        : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {m.substring(0, 3)}
@@ -487,137 +515,143 @@
             </div>
           </header>
 
-          {/* Main Content */}
-          <main className="flex-1 p-4 space-y-4">
+          {/* Main Content - Dynamic Adaptive Responsive Grid for Landscape */}
+          <main className="flex-1 p-4 ios-safe-container space-y-4">
 
             {/* TAB 1: OVERVIEW & DASHBOARD */}
             {activeTab === 'dashboard' && (
-              <div className="space-y-4">
+              <div className="space-y-4 landscape:space-y-0 landscape:grid landscape:grid-cols-2 landscape:gap-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
                 
-                {/* Cash Flow Summary Card */}
-                <div className={`p-4 rounded-3xl border ${cardAccentTheme} flex items-center justify-between relative overflow-hidden`}>
-                  <div>
-                    <span className={`text-[9px] font-black uppercase tracking-widest block mb-0.5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
-                      {selectedMonth.toUpperCase()} {selectedYear} CASH FLOW
-                    </span>
-                    <p className="text-3xl font-black tracking-tight text-emerald-500">
-                      +£{netSavings.toFixed(2)}
-                    </p>
-                    <div className={`flex items-center space-x-2 mt-1.5 text-[10px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <span>In: £{totalIncome.toFixed(2)}</span>
-                      <span>•</span>
-                      <span>Out: £{totalExpenses.toFixed(2)}</span>
-                    </div>
-                  </div>
-
-                  <ProgressCircle 
-                    percent={totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 0} 
-                    size={72} 
-                    strokeWidth={7}
-                    color="stroke-emerald-500"
-                    label="Spent"
-                    isDark={isDark}
-                  />
-                </div>
-
-                {/* Income vs Outgoings Cards */}
-                <div className="grid grid-cols-2 gap-3">
-                  <div className={`p-3.5 rounded-2xl border ${cardTheme} space-y-1`}>
-                    <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <Icon name="arrow-down-left" size={14} className="text-emerald-500" />
-                      <span>Total Income</span>
-                    </div>
-                    <p className="text-lg font-black text-emerald-500">£{totalIncome.toFixed(2)}</p>
-                    <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Base £{baseIncome.toFixed(0)} · Side £{totalExtraIncome.toFixed(0)}</p>
-                  </div>
-
-                  <div className={`p-3.5 rounded-2xl border ${cardTheme} space-y-1`}>
-                    <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                      <Icon name="arrow-up-right" size={14} className="text-rose-500" />
-                      <span>Outgoings</span>
-                    </div>
-                    <p className="text-lg font-black text-rose-500">£{totalExpenses.toFixed(2)}</p>
-                    <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{currentMonthObj.expenses.length} Total Bills</p>
-                  </div>
-                </div>
-
-                {/* 12-Month Bar Chart */}
-                <div className={`p-4 rounded-3xl border ${cardTheme} space-y-3`}>
-                  <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    {selectedYear} YEARLY TREND (JAN - DEC)
-                  </h3>
-
-                  <MonthlyTrendChart 
-                    data={yearTrendData} 
-                    selectedMonth={selectedMonth} 
-                    onSelectMonth={setSelectedMonth} 
-                    isDark={isDark}
-                  />
-                </div>
-
-                {/* Category Gauges */}
-                <div className={`p-4 rounded-3xl border ${cardTheme} space-y-3`}>
-                  <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                    SPENDING CATEGORIES
-                  </h3>
-
-                  <div className="grid grid-cols-3 gap-2 text-center">
-                    <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
-                      <ProgressCircle percent={(categoryTotals.NEEDS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-blue-500" isDark={isDark} />
-                      <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Needs</span>
-                      <span className="text-[10px] font-extrabold text-blue-500">£{categoryTotals.NEEDS.toFixed(0)}</span>
-                    </div>
-
-                    <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
-                      <ProgressCircle percent={(categoryTotals.WANTS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-amber-500" isDark={isDark} />
-                      <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Wants</span>
-                      <span className="text-[10px] font-extrabold text-amber-500">£{categoryTotals.WANTS.toFixed(0)}</span>
-                    </div>
-
-                    <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
-                      <ProgressCircle percent={(categoryTotals.SAVINGS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-emerald-500" isDark={isDark} />
-                      <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Savings</span>
-                      <span className="text-[10px] font-extrabold text-emerald-500">£{categoryTotals.SAVINGS.toFixed(0)}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Top Monthly Bills List */}
-                <div className={`p-4 rounded-3xl border ${cardTheme} space-y-3`}>
-                  <div className="flex items-center justify-between">
-                    <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
-                      TOP BILLS ({selectedMonth.toUpperCase()})
-                    </h3>
-                    <button 
-                      onClick={() => setActiveTab('budget')} 
-                      className={`text-[10px] font-extrabold ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
-                    >
-                      View All ({currentMonthObj.expenses.length})
-                    </button>
-                  </div>
-
-                  <div className="space-y-2">
-                    {currentMonthObj.expenses.slice(0, 5).map(item => (
-                      <div key={item.id} className={`p-3 rounded-2xl flex items-center justify-between border ${isDark ? 'bg-zinc-950/60 border-zinc-800/80' : 'bg-slate-50 border-slate-200/80'}`}>
-                        <div className="flex items-center space-x-3">
-                          <button 
-                            onClick={() => toggleExpenseStatus(item.id)}
-                            className={`p-1.5 rounded-xl transition-all ${
-                              item.status === 'Paid' 
-                                ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' 
-                                : isDark ? 'bg-zinc-800 text-zinc-500 border border-zinc-700' : 'bg-slate-200 text-slate-400 border border-slate-300'
-                            }`}
-                          >
-                            <Icon name="check" size={14} />
-                          </button>
-                          <div>
-                            <p className={`text-xs font-bold ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{item.name}</p>
-                            <p className={`text-[9px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Due {item.dueDate} · {item.payer}</p>
-                          </div>
-                        </div>
-                        <span className={`text-xs font-black ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>£{Number(item.actual || item.budget).toFixed(2)}</span>
+                {/* Left Column in Landscape */}
+                <div className="space-y-4">
+                  {/* Cash Flow Summary Card */}
+                  <div className={`p-4.5 border ${cardAccentTheme} flex items-center justify-between relative overflow-hidden`}>
+                    <div>
+                      <span className={`text-[9px] font-black uppercase tracking-widest block mb-0.5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                        {selectedMonth.toUpperCase()} {selectedYear} CASH FLOW
+                      </span>
+                      <p className="text-3xl font-black tracking-tight text-emerald-500">
+                        +£{netSavings.toFixed(2)}
+                      </p>
+                      <div className={`flex items-center space-x-2 mt-2 text-[10px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <span>In: £{totalIncome.toFixed(2)}</span>
+                        <span>•</span>
+                        <span>Out: £{totalExpenses.toFixed(2)}</span>
                       </div>
-                    ))}
+                    </div>
+
+                    <ProgressCircle 
+                      percent={totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 0} 
+                      size={72} 
+                      strokeWidth={7}
+                      color="stroke-emerald-500"
+                      label="Spent"
+                      isDark={isDark}
+                    />
+                  </div>
+
+                  {/* Income vs Outgoings Cards */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className={`p-3.5 border ${cardTheme} space-y-1`}>
+                      <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <Icon name="arrow-down-left" size={14} className="text-emerald-500" />
+                        <span>Total Income</span>
+                      </div>
+                      <p className="text-lg font-black text-emerald-500">£{totalIncome.toFixed(2)}</p>
+                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Base £{baseIncome.toFixed(0)} · Side £{totalExtraIncome.toFixed(0)}</p>
+                    </div>
+
+                    <div className={`p-3.5 border ${cardTheme} space-y-1`}>
+                      <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                        <Icon name="arrow-up-right" size={14} className="text-rose-500" />
+                        <span>Outgoings</span>
+                      </div>
+                      <p className="text-lg font-black text-rose-500">£{totalExpenses.toFixed(2)}</p>
+                      <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{currentMonthObj.expenses.length} Total Bills</p>
+                    </div>
+                  </div>
+
+                  {/* Spending Categories Gauges */}
+                  <div className={`p-4 border ${cardTheme} space-y-3`}>
+                    <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      SPENDING CATEGORIES
+                    </h3>
+
+                    <div className="grid grid-cols-3 gap-2 text-center">
+                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                        <ProgressCircle percent={(categoryTotals.NEEDS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-blue-500" isDark={isDark} />
+                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Needs</span>
+                        <span className="text-[10px] font-extrabold text-blue-500">£{categoryTotals.NEEDS.toFixed(0)}</span>
+                      </div>
+
+                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                        <ProgressCircle percent={(categoryTotals.WANTS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-amber-500" isDark={isDark} />
+                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Wants</span>
+                        <span className="text-[10px] font-extrabold text-amber-500">£{categoryTotals.WANTS.toFixed(0)}</span>
+                      </div>
+
+                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                        <ProgressCircle percent={(categoryTotals.SAVINGS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-emerald-500" isDark={isDark} />
+                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Savings</span>
+                        <span className="text-[10px] font-extrabold text-emerald-500">£{categoryTotals.SAVINGS.toFixed(0)}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Column in Landscape */}
+                <div className="space-y-4">
+                  {/* 12-Month Bar Chart */}
+                  <div className={`p-4 border ${cardTheme} space-y-3`}>
+                    <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                      {selectedYear} YEARLY TREND (JAN - DEC)
+                    </h3>
+
+                    <MonthlyTrendChart 
+                      data={yearTrendData} 
+                      selectedMonth={selectedMonth} 
+                      onSelectMonth={setSelectedMonth} 
+                      isDark={isDark}
+                    />
+                  </div>
+
+                  {/* Top Monthly Bills List */}
+                  <div className={`p-4 border ${cardTheme} space-y-3`}>
+                    <div className="flex items-center justify-between">
+                      <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                        TOP BILLS ({selectedMonth.toUpperCase()})
+                      </h3>
+                      <button 
+                        onClick={() => setActiveTab('budget')} 
+                        className={`text-[10px] font-extrabold active:scale-95 transition-transform ${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-700'}`}
+                      >
+                        View All ({currentMonthObj.expenses.length})
+                      </button>
+                    </div>
+
+                    <div className="space-y-2 divide-y divide-zinc-800/40">
+                      {currentMonthObj.expenses.slice(0, 5).map(item => (
+                        <div key={item.id} className="pt-2 flex items-center justify-between">
+                          <div className="flex items-center space-x-3">
+                            <button 
+                              onClick={() => toggleExpenseStatus(item.id)}
+                              className={`p-1.5 rounded-xl transition-all active:scale-90 ${
+                                item.status === 'Paid' 
+                                  ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' 
+                                  : isDark ? 'bg-zinc-800 text-zinc-500 border border-zinc-700' : 'bg-slate-200 text-slate-400 border border-slate-300'
+                              }`}
+                            >
+                              <Icon name="check" size={14} />
+                            </button>
+                            <div>
+                              <p className={`text-xs font-bold ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{item.name}</p>
+                              <p className={`text-[9px] ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Due {item.dueDate} · {item.payer}</p>
+                            </div>
+                          </div>
+                          <span className={`text-xs font-black ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>£{Number(item.actual || item.budget).toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -638,30 +672,30 @@
                       isNew: true,
                       item: { id: 'e_' + Date.now(), name: '', category: 'NEEDS', budget: 50, actual: 50, payer: 'David', dueDate: '1st', status: 'Pending' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-md shadow-blue-500/20"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Bill</span>
                   </button>
                 </div>
 
-                <div className={`p-3 rounded-2xl border ${isDark ? 'bg-zinc-900/90 border-zinc-800' : 'bg-white border-slate-200 shadow-sm'} flex justify-between text-xs font-bold`}>
+                <div className={`p-3 border ${cardTheme} flex justify-between text-xs font-bold`}>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Budgeted: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>£{totalBudgetedExpenses.toFixed(2)}</strong></span>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Actual: <strong className="text-rose-500">£{totalExpenses.toFixed(2)}</strong></span>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Variance: <strong className={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-500" : "text-rose-500"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
                 </div>
 
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {currentMonthObj.expenses.map(item => {
                     const variance = Number(item.budget || 0) - Number(item.actual || 0);
 
                     return (
-                      <div key={item.id} className={`p-3.5 rounded-2xl border ${cardTheme} space-y-2`}>
+                      <div key={item.id} className={`p-3.5 border ${cardTheme} space-y-2`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
                             <button 
                               onClick={() => toggleExpenseStatus(item.id)}
-                              className={`px-2 py-0.5 rounded text-[10px] font-black uppercase transition-all ${
+                              className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all active:scale-90 ${
                                 item.status === 'Paid' 
                                   ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' 
                                   : isDark ? 'bg-zinc-800 text-slate-400 border border-zinc-700' : 'bg-slate-200 text-slate-500 border border-slate-300'
@@ -680,16 +714,16 @@
                             }`}>
                               {item.payer}
                             </span>
-                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} className={`p-1 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                               <Icon name="edit-3" size={14} />
                             </button>
-                            <button onClick={() => deleteExpense(item.id)} className={`p-1 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
+                            <button onClick={() => deleteExpense(item.id)} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
                               <Icon name="trash-2" size={14} />
                             </button>
                           </div>
                         </div>
 
-                        <div className={`grid grid-cols-3 gap-2 pt-1 border-t ${isDark ? 'border-zinc-800/80' : 'border-slate-200'} text-[10px]`}>
+                        <div className={`grid grid-cols-3 gap-2 pt-2 border-t ${isDark ? 'border-zinc-800/80' : 'border-slate-200'} text-[10px]`}>
                           <div>
                             <span className={isDark ? 'text-slate-500 block' : 'text-slate-400 block'}>Budget</span>
                             <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>£{Number(item.budget || 0).toFixed(2)}</span>
@@ -726,14 +760,14 @@
                       isNew: true,
                       item: { id: 'x_' + Date.now(), date: new Date().toISOString().split('T')[0], description: '', duration: '1h', price: 50, net: 50, status: 'Paid' }
                     })}
-                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-md shadow-emerald-500/20"
+                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
                   >
                     <Icon name="plus" size={14} />
                     <span>Log Gig</span>
                   </button>
                 </div>
 
-                <div className={`p-4 rounded-3xl border ${isDark ? 'bg-emerald-950/20 border-emerald-800/40' : 'bg-emerald-50 border-emerald-200'} flex items-center justify-between`}>
+                <div className={`p-4.5 border ${isDark ? 'bg-emerald-950/20 border-emerald-800/40 rounded-[22px]' : 'bg-emerald-50 border-emerald-200 rounded-[22px]'} flex items-center justify-between`}>
                   <div>
                     <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block">Monthly Side Hustles</span>
                     <span className="text-2xl font-black text-emerald-500">£{totalExtraIncome.toFixed(2)}</span>
@@ -743,9 +777,9 @@
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {currentMonthObj.extraIncome.map(item => (
-                    <div key={item.id} className={`p-3.5 rounded-2xl border ${cardTheme} flex items-center justify-between`}>
+                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between`}>
                       <div className="flex items-center space-x-3">
                         <div className="p-2.5 bg-emerald-500/10 text-emerald-500 rounded-2xl border border-emerald-500/20">
                           <Icon name="briefcase" size={18} />
@@ -758,10 +792,10 @@
 
                       <div className="flex items-center space-x-2">
                         <span className="text-xs font-black text-emerald-500">+£{Number(item.net || item.price).toFixed(2)}</span>
-                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} className={`p-1.5 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                           <Icon name="edit-3" size={14} />
                         </button>
-                        <button onClick={() => deleteExtraIncome(item.id)} className={`p-1.5 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
+                        <button onClick={() => deleteExtraIncome(item.id)} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
                           <Icon name="trash-2" size={14} />
                         </button>
                       </div>
@@ -785,14 +819,14 @@
                       isNew: true,
                       item: { id: 'ke_' + Date.now(), name: '', category: 'Needs', amount: 20, child: 'AJ' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-md shadow-blue-500/20"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
                   >
                     <Icon name="plus" size={14} />
                     <span>Child Expense</span>
                   </button>
                 </div>
 
-                <div className={`p-4 rounded-3xl border ${isDark ? 'bg-blue-950/20 border-blue-800/30' : 'bg-blue-50 border-blue-200'} space-y-3`}>
+                <div className={`p-4.5 border ${isDark ? 'bg-blue-950/20 border-blue-800/30 rounded-[22px]' : 'bg-blue-50 border-blue-200 rounded-[22px]'} space-y-3`}>
                   <div className="flex items-center justify-between">
                     <div>
                       <span className={`text-[10px] font-bold uppercase tracking-widest block ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Monthly Child Benefit</span>
@@ -803,30 +837,29 @@
                     </div>
                   </div>
 
-                  <div className={`grid grid-cols-4 gap-1.5 pt-2 border-t ${isDark ? 'border-blue-900/40' : 'border-blue-200'} text-center`}>
-                    <div className={`p-2 rounded-xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                  <div className={`grid grid-cols-4 gap-2 pt-2 border-t ${isDark ? 'border-blue-900/40' : 'border-blue-200'} text-center`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>J. ISA (15%)</span>
                       <span className="text-xs font-bold text-blue-500">£{kidsSummary.jISA.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Needs (30%)</span>
                       <span className="text-xs font-bold text-emerald-500">£{kidsSummary.needs.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Childcare (10%)</span>
                       <span className="text-xs font-bold text-amber-500">£{kidsSummary.childcare.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Savings (45%)</span>
                       <span className="text-xs font-bold text-teal-500">£{kidsSummary.futurePot.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <h3 className={`text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>Kids Expense Log</h3>
+                <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {(currentMonthObj.kids?.expenses || []).map(item => (
-                    <div key={item.id} className={`p-3.5 rounded-2xl border ${cardTheme} flex items-center justify-between`}>
+                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between`}>
                       <div className="flex items-center space-x-3">
                         <div className="p-2 bg-blue-500/10 text-blue-500 rounded-xl">
                           <Icon name="sparkles" size={16} />
@@ -839,7 +872,7 @@
 
                       <div className="flex items-center space-x-2">
                         <span className="text-xs font-black text-rose-500">£{Number(item.amount).toFixed(2)}</span>
-                        <button onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })} className={`p-1.5 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                        <button onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                           <Icon name="edit-3" size={14} />
                         </button>
                       </div>
@@ -863,18 +896,18 @@
                       isNew: true,
                       item: { id: 'p_' + Date.now(), name: '', balance: 0, target: 1000, icon: 'piggy-bank' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-md shadow-blue-500/20"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
                   >
                     <Icon name="plus" size={14} />
                     <span>New Pot</span>
                   </button>
                 </div>
 
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {pots.map(pot => {
                     const percent = Math.min(100, Math.round((pot.balance / (pot.target || 1)) * 100));
                     return (
-                      <div key={pot.id} className={`p-4 rounded-3xl border ${cardTheme} space-y-2.5`}>
+                      <div key={pot.id} className={`p-4 border ${cardTheme} space-y-2.5`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
                             <div className="p-2.5 bg-blue-500/10 text-blue-500 rounded-2xl">
@@ -888,7 +921,7 @@
                           
                           <div className="flex items-center space-x-2">
                             <span className="text-sm font-black text-blue-500">£{pot.balance.toFixed(2)}</span>
-                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} className={`p-1.5 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                               <Icon name="edit-3" size={14} />
                             </button>
                           </div>
@@ -923,16 +956,16 @@
                       isNew: true,
                       item: { id: 'd_' + Date.now(), recipient: '', total: 500, balance: 500, comments: '' }
                     })}
-                    className="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-md shadow-rose-500/20"
+                    className="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-rose-500/20"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Debt</span>
                   </button>
                 </div>
 
-                <div className="space-y-3">
+                <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {debts.map(debt => (
-                    <div key={debt.id} className={`p-4 rounded-3xl border ${cardTheme} space-y-2`}>
+                    <div key={debt.id} className={`p-4 border ${cardTheme} space-y-2`}>
                       <div className="flex items-center justify-between">
                         <div>
                           <span className={`text-xs font-bold ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{debt.recipient}</span>
@@ -940,7 +973,7 @@
                         </div>
                         <div className="flex items-center space-x-2">
                           <span className="text-sm font-black text-rose-500">£{debt.balance.toFixed(2)} Left</span>
-                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} className={`p-1.5 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                             <Icon name="edit-3" size={14} />
                           </button>
                         </div>
@@ -957,11 +990,8 @@
 
           </main>
 
-          {/* Bottom Navigation Bar */}
-          <nav 
-            className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-xl border-t px-2 pt-2 z-40 ${headerTheme}`}
-            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.5rem)' }}
-          >
+          {/* iOS Translucent Glass Bottom Tab Bar */}
+          <nav className={`fixed bottom-0 left-0 right-0 max-w-md landscape:max-w-5xl md:max-w-4xl mx-auto backdrop-blur-2xl border-t px-2 pt-2 z-40 ios-safe-bottom ${headerTheme}`}>
             <div className="grid grid-cols-6 gap-1 text-center">
               {[
                 { id: 'dashboard', label: 'Overview', icon: 'layout-dashboard' },
@@ -974,9 +1004,9 @@
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex flex-col items-center justify-center py-2 rounded-2xl transition-all duration-200 ${
+                  className={`flex flex-col items-center justify-center py-2 rounded-2xl active:scale-90 transition-all duration-200 ${
                     activeTab === tab.id 
-                      ? 'text-blue-600 font-black bg-blue-500/10 border border-blue-500/20' 
+                      ? 'text-blue-500 font-black bg-blue-500/10 border border-blue-500/20' 
                       : isDark ? 'text-slate-400 font-semibold hover:text-slate-200' : 'text-slate-500 font-semibold hover:text-slate-800'
                   }`}
                 >
@@ -989,8 +1019,8 @@
 
           {/* Universal Edit Modal */}
           {editModal && (
-            <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-md flex items-center justify-center p-4">
-              <div className={`w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl border ${isDark ? 'bg-zinc-900 border-zinc-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'}`}>
+            <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+              <div className={`w-full max-w-sm rounded-[28px] p-5 space-y-4 shadow-2xl border ${isDark ? 'bg-zinc-900 border-zinc-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'}`}>
                 <div className={`flex items-center justify-between pb-2 border-b ${isDark ? 'border-zinc-800' : 'border-slate-200'}`}>
                   <h3 className="text-xs font-extrabold uppercase tracking-widest">
                     {editModal.isNew ? 'Add' : 'Edit'} {editModal.type.toUpperCase()}
@@ -1185,13 +1215,13 @@
                     <button 
                       type="button" 
                       onClick={() => setEditModal(null)}
-                      className={`w-1/2 py-2.5 rounded-xl text-xs font-bold ${isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
+                      className={`w-1/2 py-2.5 rounded-xl text-xs font-bold active:scale-95 transition-all ${isDark ? 'bg-zinc-800 hover:bg-zinc-700 text-slate-300' : 'bg-slate-200 hover:bg-slate-300 text-slate-700'}`}
                     >
                       Cancel
                     </button>
                     <button 
                       type="submit" 
-                      className="w-1/2 bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-blue-500/20"
+                      className="w-1/2 bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs font-bold active:scale-95 transition-all shadow-md shadow-blue-500/20"
                     >
                       Save
                     </button>

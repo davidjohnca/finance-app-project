@@ -21,7 +21,7 @@
 
   <style>
     :root {
-      --sat: env(safe-area-inset-top, 0px);
+      --sat: env(safe-area-inset-top, 20px);
       --sab: env(safe-area-inset-bottom, 0px);
     }
     html, body {
@@ -96,7 +96,7 @@
       }
     };
 
-    // Circular Gauge Component
+    // Circular Progress Gauge
     const ProgressCircle = ({ percent = 0, size = 64, strokeWidth = 6, color = "stroke-emerald-500", label, isDark = true }) => {
       const radius = (size - strokeWidth) / 2;
       const circumference = 2 * Math.PI * radius;
@@ -265,7 +265,7 @@
         return initial;
       });
 
-      // Synchronize body background and theme-color meta tag directly
+      // Synchronize document body background and status bar meta color
       useEffect(() => {
         const themeBg = isDark ? '#000000' : '#f2f2f7';
         document.body.style.backgroundColor = themeBg;
@@ -411,13 +411,19 @@
       const bgTheme = isDark ? "bg-[#000000] text-slate-100" : "bg-[#f2f2f7] text-slate-900";
       const cardTheme = isDark ? "bg-zinc-900/80 border-zinc-800/80 shadow-lg" : "bg-white/80 border-slate-200/80 shadow-sm";
       const cardAccentTheme = isDark ? "bg-gradient-to-tr from-zinc-900 to-zinc-900/90 border-blue-500/30" : "bg-gradient-to-tr from-white to-slate-50 border-blue-400/40 shadow-md";
-      const headerTheme = isDark ? "bg-[#000000]/90 border-zinc-800/80" : "bg-[#f2f2f7]/90 border-slate-200/80";
+      const headerTheme = isDark ? "bg-[#000000]/95 border-zinc-800/80" : "bg-[#f2f2f7]/95 border-slate-200/80";
 
       return (
-        <div className={`min-h-screen max-w-md mx-auto ${bgTheme} flex flex-col pb-24 transition-colors duration-300`}>
+        <div 
+          className={`min-h-screen max-w-md mx-auto ${bgTheme} flex flex-col transition-colors duration-300`}
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 5rem)' }}
+        >
           
-          {/* iOS Header Bar */}
-          <header className={`sticky top-0 z-30 backdrop-blur-xl border-b ${headerTheme} p-4`}>
+          {/* iOS Sticky Top Header Bar with Notch Safe Area Inset */}
+          <header 
+            className={`sticky top-0 z-30 backdrop-blur-xl border-b ${headerTheme} px-4 pb-3`}
+            style={{ paddingTop: 'calc(env(safe-area-inset-top, 20px) + 0.75rem)' }}
+          >
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center space-x-2.5">
                 <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-md shadow-blue-500/20">
@@ -950,8 +956,11 @@
 
           </main>
 
-          {/* Bottom Navigation Bar */}
-          <nav className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-xl border-t p-2 z-40 ${headerTheme}`}>
+          {/* Bottom Navigation Bar with iOS Safe Area Inset */}
+          <nav 
+            className={`fixed bottom-0 left-0 right-0 max-w-md mx-auto backdrop-blur-xl border-t px-2 pt-2 z-40 ${headerTheme}`}
+            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 0.5rem)' }}
+          >
             <div className="grid grid-cols-6 gap-1 text-center">
               {[
                 { id: 'dashboard', label: 'Overview', icon: 'layout-dashboard' },

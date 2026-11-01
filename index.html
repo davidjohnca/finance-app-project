@@ -12,22 +12,19 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React 18 & ReactDOM UMD -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <!-- React 18 & ReactDOM UMD (Cloudflare CDNjs) -->
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 
-  <!-- Babel Standalone for JSX -->
-  <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Babel Standalone -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.6/babel.min.js"></script>
 
   <style>
-    /* Custom scrollbar and iOS webapp styling */
     body {
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
+      background-color: #0f172a;
     }
     input, select, button, textarea {
       user-select: auto;
@@ -42,23 +39,76 @@
     }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased">
   <div id="root">
     <div class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
       <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
-      <p class="text-slate-400 text-sm font-medium">Initializing Family Budget App...</p>
+      <p class="text-slate-400 text-sm font-medium">Loading Family Budget App...</p>
     </div>
   </div>
+
+  <!-- Global Error Handler -->
+  <script>
+    window.addEventListener('error', function(e) {
+      var root = document.getElementById('root');
+      if (root) {
+        root.innerHTML = '<div style="padding:20px; color:#f87171; background:#0f172a; min-height:100vh; font-family:sans-serif;">' +
+          '<h3 style="font-size:16px; font-weight:bold; margin-bottom:8px;">Script Error Detected</h3>' +
+          '<p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">' + (e.message || 'Failed to load app scripts.') + '</p>' +
+          '<pre style="background:#1e293b; padding:12px; border-radius:8px; font-size:11px; overflow:auto;">' + (e.filename || '') + ':' + (e.lineno || '') + '</pre>' +
+        '</div>';
+      }
+    });
+  </script>
 
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    // --- Inline Icon Helper Component ---
+    // Zero-dependency SVG Icon Component
     const Icon = ({ name, size = 18, className = "" }) => {
-      return <i data-lucide={name} class={`inline-block ${className}`} style={{ width: size, height: size }}></i>;
+      const props = {
+        width: size,
+        height: size,
+        viewBox: "0 0 24 24",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "2",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        className: `inline-block ${className}`
+      };
+
+      switch (name) {
+        case 'wallet':
+          return <svg {...props}><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0-0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3v4a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V7"/><path d="M18 12h.01"/></svg>;
+        case 'trending-up':
+          return <svg {...props}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
+        case 'trending-down':
+          return <svg {...props}><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
+        case 'arrow-down-left':
+          return <svg {...props}><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>;
+        case 'arrow-up-right':
+          return <svg {...props}><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>;
+        case 'plus':
+          return <svg {...props}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
+        case 'briefcase':
+          return <svg {...props}><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+        case 'piggy-bank':
+          return <svg {...props}><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-3.5c1-.5 1.5-1 2.5-2 1.5-1.5 1.5-3.5 1.5-4.5 0-2.5-1.5-4-3-4z"/><circle cx="7" cy="11" r="1"/></svg>;
+        case 'credit-card':
+          return <svg {...props}><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
+        case 'layout-dashboard':
+          return <svg {...props}><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>;
+        case 'receipt':
+          return <svg {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>;
+        case 'coins':
+          return <svg {...props}><circle cx="8" cy="8" r="6"/><path d="M18 8A6 6 0 0 1 6 18"/><path d="M7 6h1v4"/><path d="M17 12h1v4"/></svg>;
+        default:
+          return <svg {...props}><circle cx="12" cy="12" r="10"/></svg>;
+      }
     };
 
-    // --- Default Initial Data (Integrated from Spreadsheet & Notebook Expenses) ---
+    // Initial Data Setup
     const INITIAL_DEBTS = [
       { id: 'd1', recipient: 'Monteflor', total: 1500, balance: 1500, comments: '1st month rent/deposit' },
       { id: 'd2', recipient: 'Tita Norie', total: 604.52, balance: 604.52, comments: '700 EUR 1st month rent/deposit' },
@@ -66,12 +116,11 @@
     ];
 
     const INITIAL_SAVINGS_POTS = [
-      { id: 'p1', name: 'Emergency Cash ISA 🏦', balance: 1892.70, target: 5000, icon: 'shield-check' },
+      { id: 'p1', name: 'Emergency Cash ISA 🏦', balance: 1892.70, target: 5000, icon: 'wallet' },
       { id: 'p2', name: 'Debt Repayment 💸', balance: 1538.20, target: 4504.52, icon: 'credit-card' },
-      { id: 'p3', name: 'Holidays ✈️', balance: 100.00, target: 2000, icon: 'plane' },
-      { id: 'p4', name: 'Gifts 🎁', balance: 237.38, target: 500, icon: 'gift' },
-      { id: 'p5', name: 'Bonus Pot 🎯', balance: 27.55, target: 1000, icon: 'target' },
-      { id: 'p6', name: 'Junior ISA (Children) 👶', balance: 817.52, target: 5000, icon: 'sparkles' }
+      { id: 'p3', name: 'Holidays ✈️', balance: 100.00, target: 2000, icon: 'piggy-bank' },
+      { id: 'p4', name: 'Gifts 🎁', balance: 237.38, target: 500, icon: 'piggy-bank' },
+      { id: 'p5', name: 'Bonus Pot 🎯', balance: 27.55, target: 1000, icon: 'coins' }
     ];
 
     const MONTH_NAMES = [
@@ -79,7 +128,6 @@
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
 
-    // Default Recurring Monthly Expenses (Integrated from Notebook Sources)
     const DEFAULT_MONTHLY_ITEMS = [
       { id: 'e1', name: 'Rent', category: 'NEEDS', budget: 1299.00, actual: 1299.00, payer: 'All', dueDate: '1st', status: 'Paid' },
       { id: 'e2', name: 'Council Tax', category: 'NEEDS', budget: 123.00, actual: 123.00, payer: 'All', dueDate: '1st', status: 'Paid' },
@@ -104,13 +152,11 @@
       { id: 'i3', name: "Child Benefit - AJ & EC", amount: 173.20, recipient: 'Children' }
     ];
 
-    // Main React Application
     const App = () => {
       const [selectedYear, setSelectedYear] = useState(2026);
       const [selectedMonth, setSelectedMonth] = useState('January');
-      const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'budget', 'extra', 'kids', 'pots', 'debts'
+      const [activeTab, setActiveTab] = useState('dashboard');
 
-      // Persistent App State
       const [debts, setDebts] = useState(() => {
         const saved = localStorage.getItem('fb_debts');
         return saved ? JSON.parse(saved) : INITIAL_DEBTS;
@@ -125,9 +171,8 @@
         const saved = localStorage.getItem('fb_monthly_data');
         if (saved) return JSON.parse(saved);
         
-        // Generate initial dataset for 2025-2027
         const initial = {};
-        [2025, 2026, 2027].forEach(yr => {
+        [2024, 2025, 2026, 2027].forEach(yr => {
           initial[yr] = {};
           MONTH_NAMES.forEach(m => {
             initial[yr][m] = {
@@ -137,10 +182,6 @@
                 { id: 'x1', date: `${yr}-01-17`, description: 'Piano lessons', duration: '3h', price: 75, status: 'Paid', net: 75 },
                 { id: 'x2', date: `${yr}-01-22`, description: 'Spanish lessons', duration: '3h', price: 45, status: 'Paid', net: 45 },
                 { id: 'x3', date: `${yr}-01-30`, description: 'Babysitting / Nanny', duration: '8.5h', price: 150, status: 'Paid', net: 150 }
-              ],
-              kidsExpenses: [
-                { id: 'k1', name: 'School Supplies / Uniforms', amount: 45.50, category: 'Needs' },
-                { id: 'k2', name: 'Activities & Toys', amount: 20.00, category: 'Wants' }
               ]
             };
           });
@@ -148,7 +189,6 @@
         return initial;
       });
 
-      // Save to localStorage on change
       useEffect(() => {
         localStorage.setItem('fb_debts', JSON.stringify(debts));
       }, [debts]);
@@ -161,22 +201,13 @@
         localStorage.setItem('fb_monthly_data', JSON.stringify(monthlyData));
       }, [monthlyData]);
 
-      // Re-trigger Lucide icons on DOM updates
-      useEffect(() => {
-        if (window.lucide) {
-          window.lucide.createIcons();
-        }
-      });
-
-      // Safe accessors for current month view
       const currentMonthObj = useMemo(() => {
         if (!monthlyData[selectedYear] || !monthlyData[selectedYear][selectedMonth]) {
-          return { incomes: [], expenses: [], extraIncome: [], kidsExpenses: [] };
+          return { incomes: [], expenses: [], extraIncome: [] };
         }
         return monthlyData[selectedYear][selectedMonth];
       }, [monthlyData, selectedYear, selectedMonth]);
 
-      // Financial Calculations
       const totalIncome = useMemo(() => {
         return currentMonthObj.incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       }, [currentMonthObj.incomes]);
@@ -193,7 +224,6 @@
         return (totalIncome + totalExtraIncome) - totalExpenses;
       }, [totalIncome, totalExtraIncome, totalExpenses]);
 
-      // Item manipulation handlers
       const toggleExpenseStatus = (id) => {
         setMonthlyData(prev => {
           const updated = { ...prev };
@@ -232,7 +262,7 @@
       };
 
       const addExtraIncomeItem = () => {
-        const description = prompt("Enter income/gig description:");
+        const description = prompt("Enter income description:");
         if (!description) return;
         const priceStr = prompt("Enter amount (£):", "50.00");
         const price = parseFloat(priceStr) || 0;
@@ -255,8 +285,8 @@
       return (
         <div class="flex flex-col min-h-screen max-w-md mx-auto bg-slate-900 border-x border-slate-800 shadow-2xl pb-24">
           
-          <!-- Top Sticky Header -->
-          <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 p-4">
+          {/* Header */}
+          <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-4">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center space-x-2">
                 <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-xl">
@@ -264,15 +294,14 @@
                 </div>
                 <div>
                   <h1 class="text-base font-bold leading-tight">Family Budget</h1>
-                  <p class="text-xs text-slate-400">Multi-Year Finance Tracker</p>
+                  <p class="text-xs text-slate-400">Finance Tracker</p>
                 </div>
               </div>
               
-              <!-- Year Selector Dropdown -->
               <select 
                 value={selectedYear} 
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
-                class="bg-slate-800 text-xs font-bold text-indigo-400 px-3 py-1.5 rounded-lg border border-slate-700 outline-none focus:ring-2 focus:ring-indigo-500"
+                class="bg-slate-800 text-xs font-bold text-indigo-400 px-3 py-1.5 rounded-lg border border-slate-700 outline-none"
               >
                 <option value={2024}>2024</option>
                 <option value={2025}>2025</option>
@@ -281,7 +310,6 @@
               </select>
             </div>
 
-            <!-- Horizontal Month Selector -->
             <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
               {MONTH_NAMES.map(m => (
                 <button
@@ -299,14 +327,12 @@
             </div>
           </header>
 
-          <!-- Main Scrollable Content -->
-          <main class="flex-1 p-4 space-x-0 space-y-4">
+          {/* Main Content */}
+          <main class="flex-1 p-4 space-y-4">
 
-            <!-- DASHBOARD TAB -->
+            {/* Dashboard Tab */}
             {activeTab === 'dashboard' && (
               <div class="space-y-4">
-                
-                <!-- Financial Summary Cards -->
                 <div class="grid grid-cols-2 gap-3">
                   <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/60">
                     <div class="flex items-center space-x-1.5 text-xs text-slate-400 mb-1">
@@ -314,7 +340,7 @@
                       <span>Total Income</span>
                     </div>
                     <p class="text-lg font-extrabold text-emerald-400">£{(totalIncome + totalExtraIncome).toFixed(2)}</p>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Base + Side Hustles</p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Base + Extra Income</p>
                   </div>
 
                   <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/60">
@@ -323,11 +349,10 @@
                       <span>Total Expenses</span>
                     </div>
                     <p class="text-lg font-extrabold text-rose-400">£{totalExpenses.toFixed(2)}</p>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Needs & Wants</p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Monthly Outgoings</p>
                   </div>
                 </div>
 
-                <!-- Monthly Net Cash Flow Banner -->
                 <div class={`p-4 rounded-2xl border flex items-center justify-between ${
                   netSavings >= 0 
                     ? 'bg-emerald-950/40 border-emerald-800/50 text-emerald-300' 
@@ -346,11 +371,10 @@
                   </div>
                 </div>
 
-                <!-- Expense Quick List -->
                 <div class="bg-slate-800/60 rounded-2xl border border-slate-800 p-4">
                   <div class="flex items-center justify-between mb-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Top Bills ({selectedMonth})
+                      Bills Preview ({selectedMonth})
                     </h3>
                     <button onClick={() => setActiveTab('budget')} class="text-xs text-indigo-400 font-medium hover:underline">
                       View All
@@ -364,7 +388,7 @@
                           <button 
                             onClick={() => toggleExpenseStatus(item.id)}
                             class={`w-5 h-5 rounded-md flex items-center justify-center text-xs ${
-                              item.status === 'Paid' ? 'bg-emerald-500 text-slate-900' : 'bg-slate-700 text-transparent'
+                              item.status === 'Paid' ? 'bg-emerald-500 text-slate-900 font-bold' : 'bg-slate-700 text-transparent'
                             }`}
                           >
                             ✓
@@ -382,7 +406,7 @@
               </div>
             )}
 
-            <!-- MONTHLY BUDGET TAB -->
+            {/* Monthly Budget Tab */}
             {activeTab === 'budget' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
@@ -430,7 +454,7 @@
               </div>
             )}
 
-            <!-- EXTRA INCOME TAB -->
+            {/* Extra Income Tab */}
             {activeTab === 'extra' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
@@ -471,7 +495,7 @@
               </div>
             )}
 
-            <!-- SAVINGS POTS TAB -->
+            {/* Pots Tab */}
             {activeTab === 'pots' && (
               <div class="space-y-3">
                 <h2 class="text-sm font-bold text-slate-200">Savings & Emergency Pots</h2>
@@ -491,7 +515,6 @@
                           <span class="text-xs font-black text-indigo-400">£{pot.balance.toFixed(2)}</span>
                         </div>
 
-                        <!-- Progress Bar -->
                         <div class="w-full bg-slate-700/60 rounded-full h-2 overflow-hidden">
                           <div 
                             class="bg-indigo-500 h-full rounded-full transition-all duration-500" 
@@ -501,7 +524,7 @@
 
                         <div class="flex justify-between text-[10px] text-slate-400 font-medium">
                           <span>Target: £{pot.target}</span>
-                          <span>{percent}% Goal Reached</span>
+                          <span>{percent}% Reached</span>
                         </div>
                       </div>
                     );
@@ -510,7 +533,7 @@
               </div>
             )}
 
-            <!-- DEBTS & REPAYMENTS TAB -->
+            {/* Debts Tab */}
             {activeTab === 'debts' && (
               <div class="space-y-3">
                 <h2 class="text-sm font-bold text-slate-200">Repayments & Debt Trackers</h2>
@@ -524,7 +547,7 @@
                       </div>
                       <p class="text-[11px] text-slate-400">{debt.comments}</p>
                       <div class="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-700/40">
-                        <span>Original: £{debt.total}</span>
+                        <span>Total: £{debt.total}</span>
                         <span>Paid: £{(debt.total - debt.balance).toFixed(2)}</span>
                       </div>
                     </div>
@@ -535,7 +558,7 @@
 
           </main>
 
-          <!-- Bottom Sticky Navigation Bar -->
+          {/* Navigation Bar */}
           <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 p-2 z-40">
             <div class="grid grid-cols-5 gap-1 text-center">
               {[
@@ -565,35 +588,9 @@
       );
     };
 
-    // --- Service Worker Registration (Inline PWA) ---
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        const swCode = `
-          const CACHE_NAME = 'fb-budget-v2';
-          self.addEventListener('install', (e) => self.skipWaiting());
-          self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
-          self.addEventListener('fetch', (e) => {
-            e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
-          });
-        `;
-        const blob = new Blob([swCode], { type: 'text/javascript' });
-        navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-      });
-    }
-
-    // --- Safe Mount Execution ---
-    try {
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<App />);
-    } catch (err) {
-      document.getElementById('root').innerHTML = `
-        <div style="padding:24px; color:#f87171; background:#0f172a; min-h-screen; font-family:sans-serif;">
-          <h2 style="font-size:18px; font-weight:bold; margin-bottom:8px;">App Initialization Error</h2>
-          <p style="font-size:12px; color:#94a3b8; margin-bottom:12px;">Safari encountered an execution error:</p>
-          <pre style="background:#1e293b; p:12px; border-radius:8px; font-size:11px; overflow-x:auto;">${err.stack || err.message}</pre>
-        </div>
-      `;
-    }
+    // Render App directly
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
   </script>
 </body>
 </html>

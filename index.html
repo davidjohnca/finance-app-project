@@ -21,7 +21,7 @@
 
   <style>
     :root {
-      --sat: env(safe-area-inset-top, 54px);
+      --sat: env(safe-area-inset-top, 50px);
       --sab: env(safe-area-inset-bottom, 20px);
       --sal: env(safe-area-inset-left, 0px);
       --sar: env(safe-area-inset-right, 0px);
@@ -55,9 +55,9 @@
       scrollbar-width: none;
     }
 
-    /* iOS Native Layout Padding Classes */
+    /* iOS Native Safe Area Inset Utility Classes */
     .ios-safe-header {
-      padding-top: max(env(safe-area-inset-top), 54px);
+      padding-top: max(env(safe-area-inset-top), 48px);
       padding-left: max(env(safe-area-inset-left), 16px);
       padding-right: max(env(safe-area-inset-right), 16px);
     }
@@ -131,7 +131,7 @@
       const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percent)) / 100) * circumference;
 
       return (
-        <div className="relative flex flex-col items-center justify-center" style={{ width: size, height: size }}>
+        <div className="relative flex flex-col items-center justify-center shrink-0" style={{ width: size, height: size }}>
           <svg width={size} height={size} className="transform -rotate-90">
             <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} className={isDark ? "text-zinc-800" : "text-slate-200"} fill="transparent" />
             <circle
@@ -145,7 +145,7 @@
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
             <span className={`text-[11px] font-black tracking-tighter ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{Math.round(percent)}%</span>
-            {label && <span className={`text-[8px] -mt-1 font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{label}</span>}
+            {label && <span className={`text-[8px] -mt-0.5 font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{label}</span>}
           </div>
         </div>
       );
@@ -159,7 +159,7 @@
 
       return (
         <div className="space-y-2">
-          <div className={`flex items-center space-x-4 text-[10px] font-bold px-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+          <div className={`flex items-center justify-center space-x-5 text-[10px] font-bold px-1 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
             <span className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span><span>Income</span></span>
             <span className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span><span>Outgoings</span></span>
           </div>
@@ -174,7 +174,7 @@
                 <button
                   key={d.month}
                   onClick={() => onSelectMonth(d.month)}
-                  className={`flex flex-col items-center space-y-1 group active:scale-95 transition-all ${isSelected ? 'scale-105' : 'opacity-60 hover:opacity-100'}`}
+                  className={`flex flex-col items-center justify-end space-y-1 group active:scale-95 transition-all ${isSelected ? 'scale-105' : 'opacity-60 hover:opacity-100'}`}
                 >
                   <div className="flex items-end space-x-0.5 h-24">
                     <div 
@@ -197,7 +197,7 @@
       );
     };
 
-    // Seed Data[cite: 10]
+    // Seed Data[cite: 10, 11]
     const INITIAL_DEBTS = [
       { id: 'd1', recipient: 'Monteflor', total: 1500, balance: 1500, comments: '1st month rent/deposit' },
       { id: 'd2', recipient: 'Tita Norie', total: 604.52, balance: 604.52, comments: '700 EUR 1st month rent/deposit' },
@@ -293,7 +293,7 @@
         return initial;
       });
 
-      // Synchronize body background & status bar meta color
+      // Synchronize document body background and status bar meta color
       useEffect(() => {
         const themeBg = isDark ? '#000000' : '#f2f2f7';
         document.body.style.backgroundColor = themeBg;
@@ -443,19 +443,19 @@
       const cardAccentTheme = isDark 
         ? "bg-gradient-to-br from-zinc-900 via-zinc-900/90 to-zinc-950 border-blue-500/30 shadow-xl shadow-blue-500/5 rounded-[22px]" 
         : "bg-gradient-to-br from-white via-slate-50 to-blue-50/20 border-blue-300/50 shadow-md rounded-[22px]";
-      const headerTheme = isDark ? "bg-[#000000]/80 border-zinc-800/80" : "bg-[#f2f2f7]/80 border-slate-200/80";
+      const headerTheme = isDark ? "bg-[#000000]/85 border-zinc-800/80" : "bg-[#f2f2f7]/85 border-slate-200/80";
 
       return (
         <div 
-          className={`min-h-screen max-w-md landscape:max-w-5xl md:max-w-4xl mx-auto ${bgTheme} flex flex-col transition-colors duration-300`}
+          className={`min-h-screen max-w-md landscape:max-w-6xl md:max-w-5xl mx-auto ${bgTheme} flex flex-col transition-colors duration-300`}
           style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 20px) + 5rem)' }}
         >
           
-          {/* iOS Sticky Header with Safe Area Notch Offset */}
+          {/* iOS Sticky Header with Notch Safe-Area Offset */}
           <header className={`sticky top-0 z-40 backdrop-blur-2xl border-b ${headerTheme} ios-safe-header transition-all`}>
             <div className="flex items-center justify-between mb-3 pt-1">
               <div className="flex items-center space-x-2.5">
-                <div className="p-2.5 bg-blue-600 text-white rounded-2xl shadow-md shadow-blue-500/20 active:scale-95 transition-transform">
+                <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 active:scale-95 transition-transform">
                   <Icon name="wallet" size={20} />
                 </div>
                 <div>
@@ -468,7 +468,7 @@
                 {/* Light/Dark Toggle */}
                 <button
                   onClick={() => setIsDark(!isDark)}
-                  className={`p-2 rounded-xl border active:scale-95 transition-all ${
+                  className={`w-9 h-9 rounded-xl border flex items-center justify-center active:scale-95 transition-all ${
                     isDark 
                       ? 'bg-zinc-800/80 text-amber-400 border-zinc-700/80 hover:bg-zinc-700' 
                       : 'bg-slate-200/80 text-slate-700 border-slate-300 hover:bg-slate-300'
@@ -515,25 +515,25 @@
             </div>
           </header>
 
-          {/* Main Content - Dynamic Adaptive Responsive Grid for Landscape */}
-          <main className="flex-1 p-4 ios-safe-container space-y-4">
+          {/* Main Content Area */}
+          <main className="flex-1 p-4 ios-safe-container space-y-4 pt-3">
 
             {/* TAB 1: OVERVIEW & DASHBOARD */}
             {activeTab === 'dashboard' && (
-              <div className="space-y-4 landscape:space-y-0 landscape:grid landscape:grid-cols-2 landscape:gap-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+              <div className="space-y-4 landscape:space-y-0 landscape:grid landscape:grid-cols-2 landscape:gap-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4 items-start">
                 
                 {/* Left Column in Landscape */}
                 <div className="space-y-4">
                   {/* Cash Flow Summary Card */}
                   <div className={`p-4.5 border ${cardAccentTheme} flex items-center justify-between relative overflow-hidden`}>
-                    <div>
-                      <span className={`text-[9px] font-black uppercase tracking-widest block mb-0.5 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                    <div className="space-y-1">
+                      <span className={`text-[9px] font-black uppercase tracking-widest block ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
                         {selectedMonth.toUpperCase()} {selectedYear} CASH FLOW
                       </span>
-                      <p className="text-3xl font-black tracking-tight text-emerald-500">
+                      <p className="text-3xl font-black tracking-tight text-emerald-500 leading-none">
                         +£{netSavings.toFixed(2)}
                       </p>
-                      <div className={`flex items-center space-x-2 mt-2 text-[10px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <div className={`flex items-center space-x-2 pt-1 text-[10px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                         <span>In: £{totalIncome.toFixed(2)}</span>
                         <span>•</span>
                         <span>Out: £{totalExpenses.toFixed(2)}</span>
@@ -552,7 +552,7 @@
 
                   {/* Income vs Outgoings Cards */}
                   <div className="grid grid-cols-2 gap-3">
-                    <div className={`p-3.5 border ${cardTheme} space-y-1`}>
+                    <div className={`p-3.5 border ${cardTheme} space-y-1 flex flex-col justify-center`}>
                       <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                         <Icon name="arrow-down-left" size={14} className="text-emerald-500" />
                         <span>Total Income</span>
@@ -561,7 +561,7 @@
                       <p className={`text-[9px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Base £{baseIncome.toFixed(0)} · Side £{totalExtraIncome.toFixed(0)}</p>
                     </div>
 
-                    <div className={`p-3.5 border ${cardTheme} space-y-1`}>
+                    <div className={`p-3.5 border ${cardTheme} space-y-1 flex flex-col justify-center`}>
                       <div className={`flex items-center space-x-1.5 text-[10px] font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                         <Icon name="arrow-up-right" size={14} className="text-rose-500" />
                         <span>Outgoings</span>
@@ -573,26 +573,26 @@
 
                   {/* Spending Categories Gauges */}
                   <div className={`p-4 border ${cardTheme} space-y-3`}>
-                    <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    <h3 className={`text-xs font-black uppercase tracking-wider text-center ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                       SPENDING CATEGORIES
                     </h3>
 
                     <div className="grid grid-cols-3 gap-2 text-center">
-                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                      <div className={`p-3 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center justify-center`}>
                         <ProgressCircle percent={(categoryTotals.NEEDS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-blue-500" isDark={isDark} />
-                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Needs</span>
+                        <span className={`text-[10px] font-bold mt-2 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Needs</span>
                         <span className="text-[10px] font-extrabold text-blue-500">£{categoryTotals.NEEDS.toFixed(0)}</span>
                       </div>
 
-                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                      <div className={`p-3 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center justify-center`}>
                         <ProgressCircle percent={(categoryTotals.WANTS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-amber-500" isDark={isDark} />
-                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Wants</span>
+                        <span className={`text-[10px] font-bold mt-2 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Wants</span>
                         <span className="text-[10px] font-extrabold text-amber-500">£{categoryTotals.WANTS.toFixed(0)}</span>
                       </div>
 
-                      <div className={`p-2.5 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center`}>
+                      <div className={`p-3 rounded-2xl border ${isDark ? 'bg-zinc-950/60 border-zinc-800' : 'bg-slate-50 border-slate-200'} flex flex-col items-center justify-center`}>
                         <ProgressCircle percent={(categoryTotals.SAVINGS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-emerald-500" isDark={isDark} />
-                        <span className={`text-[10px] font-bold mt-1.5 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Savings</span>
+                        <span className={`text-[10px] font-bold mt-2 ${isDark ? 'text-slate-200' : 'text-slate-700'}`}>Savings</span>
                         <span className="text-[10px] font-extrabold text-emerald-500">£{categoryTotals.SAVINGS.toFixed(0)}</span>
                       </div>
                     </div>
@@ -603,7 +603,7 @@
                 <div className="space-y-4">
                   {/* 12-Month Bar Chart */}
                   <div className={`p-4 border ${cardTheme} space-y-3`}>
-                    <h3 className={`text-xs font-black uppercase tracking-wider ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+                    <h3 className={`text-xs font-black uppercase tracking-wider text-center ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
                       {selectedYear} YEARLY TREND (JAN - DEC)
                     </h3>
 
@@ -635,7 +635,7 @@
                           <div className="flex items-center space-x-3">
                             <button 
                               onClick={() => toggleExpenseStatus(item.id)}
-                              className={`p-1.5 rounded-xl transition-all active:scale-90 ${
+                              className={`w-7 h-7 rounded-xl flex items-center justify-center transition-all active:scale-90 shrink-0 ${
                                 item.status === 'Paid' 
                                   ? 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30' 
                                   : isDark ? 'bg-zinc-800 text-zinc-500 border border-zinc-700' : 'bg-slate-200 text-slate-400 border border-slate-300'
@@ -679,7 +679,7 @@
                   </button>
                 </div>
 
-                <div className={`p-3 border ${cardTheme} flex justify-between text-xs font-bold`}>
+                <div className={`p-3 border ${cardTheme} flex justify-between text-xs font-bold items-center`}>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Budgeted: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>£{totalBudgetedExpenses.toFixed(2)}</strong></span>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Actual: <strong className="text-rose-500">£{totalExpenses.toFixed(2)}</strong></span>
                   <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Variance: <strong className={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-500" : "text-rose-500"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
@@ -690,7 +690,7 @@
                     const variance = Number(item.budget || 0) - Number(item.actual || 0);
 
                     return (
-                      <div key={item.id} className={`p-3.5 border ${cardTheme} space-y-2`}>
+                      <div key={item.id} className={`p-3.5 border ${cardTheme} space-y-2 flex flex-col justify-between`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
                             <button 
@@ -772,7 +772,7 @@
                     <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block">Monthly Side Hustles</span>
                     <span className="text-2xl font-black text-emerald-500">£{totalExtraIncome.toFixed(2)}</span>
                   </div>
-                  <div className="p-3 bg-emerald-500/20 text-emerald-500 rounded-2xl">
+                  <div className="w-11 h-11 bg-emerald-500/20 text-emerald-500 rounded-2xl flex items-center justify-center">
                     <Icon name="coins" size={24} />
                   </div>
                 </div>
@@ -781,7 +781,7 @@
                   {currentMonthObj.extraIncome.map(item => (
                     <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between`}>
                       <div className="flex items-center space-x-3">
-                        <div className="p-2.5 bg-emerald-500/10 text-emerald-500 rounded-2xl border border-emerald-500/20">
+                        <div className="w-9 h-9 bg-emerald-500/10 text-emerald-500 rounded-2xl border border-emerald-500/20 flex items-center justify-center shrink-0">
                           <Icon name="briefcase" size={18} />
                         </div>
                         <div>
@@ -832,25 +832,25 @@
                       <span className={`text-[10px] font-bold uppercase tracking-widest block ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Monthly Child Benefit</span>
                       <span className={`text-2xl font-black ${isDark ? 'text-blue-200' : 'text-blue-900'}`}>£{kidsSummary.totalBenefit.toFixed(2)}</span>
                     </div>
-                    <div className="p-3 bg-blue-500/20 text-blue-500 rounded-2xl">
+                    <div className="w-11 h-11 bg-blue-500/20 text-blue-500 rounded-2xl flex items-center justify-center">
                       <Icon name="baby" size={24} />
                     </div>
                   </div>
 
                   <div className={`grid grid-cols-4 gap-2 pt-2 border-t ${isDark ? 'border-blue-900/40' : 'border-blue-200'} text-center`}>
-                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'} flex flex-col items-center justify-center`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>J. ISA (15%)</span>
                       <span className="text-xs font-bold text-blue-500">£{kidsSummary.jISA.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'} flex flex-col items-center justify-center`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Needs (30%)</span>
                       <span className="text-xs font-bold text-emerald-500">£{kidsSummary.needs.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'} flex flex-col items-center justify-center`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Childcare (10%)</span>
                       <span className="text-xs font-bold text-amber-500">£{kidsSummary.childcare.toFixed(2)}</span>
                     </div>
-                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'}`}>
+                    <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'} flex flex-col items-center justify-center`}>
                       <span className={`text-[9px] block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Savings (45%)</span>
                       <span className="text-xs font-bold text-teal-500">£{kidsSummary.futurePot.toFixed(2)}</span>
                     </div>
@@ -861,7 +861,7 @@
                   {(currentMonthObj.kids?.expenses || []).map(item => (
                     <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between`}>
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-blue-500/10 text-blue-500 rounded-xl">
+                        <div className="w-8 h-8 bg-blue-500/10 text-blue-500 rounded-xl flex items-center justify-center shrink-0">
                           <Icon name="sparkles" size={16} />
                         </div>
                         <div>
@@ -907,10 +907,10 @@
                   {pots.map(pot => {
                     const percent = Math.min(100, Math.round((pot.balance / (pot.target || 1)) * 100));
                     return (
-                      <div key={pot.id} className={`p-4 border ${cardTheme} space-y-2.5`}>
+                      <div key={pot.id} className={`p-4 border ${cardTheme} space-y-2.5 flex flex-col justify-between`}>
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-2.5">
-                            <div className="p-2.5 bg-blue-500/10 text-blue-500 rounded-2xl">
+                            <div className="w-9 h-9 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center shrink-0">
                               <Icon name={pot.icon || 'piggy-bank'} size={18} />
                             </div>
                             <div>
@@ -965,7 +965,7 @@
 
                 <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {debts.map(debt => (
-                    <div key={debt.id} className={`p-4 border ${cardTheme} space-y-2`}>
+                    <div key={debt.id} className={`p-4 border ${cardTheme} space-y-2 flex flex-col justify-between`}>
                       <div className="flex items-center justify-between">
                         <div>
                           <span className={`text-xs font-bold ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{debt.recipient}</span>
@@ -991,7 +991,7 @@
           </main>
 
           {/* iOS Translucent Glass Bottom Tab Bar */}
-          <nav className={`fixed bottom-0 left-0 right-0 max-w-md landscape:max-w-5xl md:max-w-4xl mx-auto backdrop-blur-2xl border-t px-2 pt-2 z-40 ios-safe-bottom ${headerTheme}`}>
+          <nav className={`fixed bottom-0 left-0 right-0 max-w-md landscape:max-w-6xl md:max-w-5xl mx-auto backdrop-blur-2xl border-t px-2 pt-2 z-40 ios-safe-bottom ${headerTheme}`}>
             <div className="grid grid-cols-6 gap-1 text-center">
               {[
                 { id: 'dashboard', label: 'Overview', icon: 'layout-dashboard' },

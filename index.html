@@ -109,8 +109,8 @@
       const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percent)) / 100) * circumference;
 
       return (
-        <div class="relative flex flex-col items-center justify-center" style={{ width: size, height: size }}>
-          <svg width={size} height={size} class="transform -rotate-90">
+        <div className="relative flex flex-col items-center justify-center" style={{ width: size, height: size }}>
+          <svg width={size} height={size} className="transform -rotate-90">
             <circle cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth} className="text-slate-800" fill="transparent" />
             <circle
               cx={size / 2} cy={size / 2} r={radius} stroke="currentColor" strokeWidth={strokeWidth}
@@ -121,9 +121,9 @@
               strokeLinecap="round"
             />
           </svg>
-          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-            <span class="text-[11px] font-black tracking-tighter text-slate-100">{Math.round(percent)}%</span>
-            {label && <span class="text-[8px] text-slate-400 -mt-1 font-semibold">{label}</span>}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span className="text-[11px] font-black tracking-tighter text-slate-100">{Math.round(percent)}%</span>
+            {label && <span className="text-[8px] text-slate-400 -mt-1 font-semibold">{label}</span>}
           </div>
         </div>
       );
@@ -136,13 +136,13 @@
       }, [data]);
 
       return (
-        <div class="space-y-2">
-          <div class="flex items-center justify-between text-[10px] text-slate-400 font-bold px-1">
-            <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span><span>Income</span></span>
-            <span class="flex items-center space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span><span>Outgoings</span></span>
+        <div className="space-y-2">
+          <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold px-1">
+            <span className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block"></span><span>Income</span></span>
+            <span className="flex items-center space-x-1.5"><span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block"></span><span>Outgoings</span></span>
           </div>
 
-          <div class="h-32 w-full flex items-end justify-between pt-3 pb-1 px-1 border-b border-slate-800/80">
+          <div className="h-32 w-full flex items-end justify-between pt-3 pb-1 px-1 border-b border-slate-800/80">
             {data.map((d) => {
               const incHeight = Math.round((d.income / maxVal) * 95);
               const expHeight = Math.round((d.expenses / maxVal) * 95);
@@ -152,19 +152,19 @@
                 <button
                   key={d.month}
                   onClick={() => onSelectMonth(d.month)}
-                  class={`flex flex-col items-center space-y-1 group transition-all ${isSelected ? 'scale-105' : 'opacity-65 hover:opacity-100'}`}
+                  className={`flex flex-col items-center space-y-1 group transition-all ${isSelected ? 'scale-105' : 'opacity-65 hover:opacity-100'}`}
                 >
-                  <div class="flex items-end space-x-0.5 h-24">
+                  <div className="flex items-end space-x-0.5 h-24">
                     <div 
                       style={{ height: `${incHeight}px` }} 
-                      class={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-emerald-400 shadow-lg shadow-emerald-400/40' : 'bg-emerald-500/50'}`}
+                      className={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-emerald-400 shadow-lg shadow-emerald-400/40' : 'bg-emerald-500/50'}`}
                     ></div>
                     <div 
                       style={{ height: `${expHeight}px` }} 
-                      class={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-rose-400 shadow-lg shadow-rose-400/40' : 'bg-rose-500/50'}`}
+                      className={`w-2 rounded-t-sm transition-all ${isSelected ? 'bg-rose-400 shadow-lg shadow-rose-400/40' : 'bg-rose-500/50'}`}
                     ></div>
                   </div>
-                  <span class={`text-[9px] font-bold ${isSelected ? 'text-indigo-400 font-black' : 'text-slate-400'}`}>
+                  <span className={`text-[9px] font-bold ${isSelected ? 'text-indigo-400 font-black' : 'text-slate-400'}`}>
                     {d.month.substring(0, 3)}
                   </span>
                 </button>
@@ -397,25 +397,24 @@
       };
 
       return (
-        <div class="min-h-screen max-w-md mx-auto bg-slate-950 border-x border-slate-900 shadow-2xl flex flex-col pb-24">
+        <div className="min-h-screen max-w-md mx-auto bg-slate-950 border-x border-slate-900 shadow-2xl flex flex-col pb-24">
           
-          <!-- Native iOS Clean App Header -->
-          <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 p-4">
-            <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center space-x-2.5">
-                <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-violet-500 text-white rounded-2xl shadow-lg shadow-indigo-500/25">
+          <header className="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center space-x-2.5">
+                <div className="p-2.5 bg-gradient-to-tr from-indigo-600 to-violet-500 text-white rounded-2xl shadow-lg shadow-indigo-500/25">
                   <Icon name="wallet" size={20} />
                 </div>
                 <div>
-                  <h1 class="text-base font-black tracking-tight text-white leading-tight">Family Budget</h1>
-                  <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Multi-Year Finance Tracker</p>
+                  <h1 className="text-base font-black tracking-tight text-white leading-tight">Family Budget</h1>
+                  <p className="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Multi-Year Finance Tracker</p>
                 </div>
               </div>
               
               <select 
                 value={selectedYear} 
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
-                class="bg-slate-900 text-xs font-extrabold text-indigo-400 px-3 py-2 rounded-xl border border-indigo-500/30 outline-none"
+                className="bg-slate-900 text-xs font-extrabold text-indigo-400 px-3 py-2 rounded-xl border border-indigo-500/30 outline-none"
               >
                 <option value={2024}>2024</option>
                 <option value={2025}>2025</option>
@@ -424,13 +423,12 @@
               </select>
             </div>
 
-            <!-- Month Selector Pill Carousel -->
-            <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
+            <div className="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
               {MONTH_NAMES.map(m => (
                 <button
                   key={m}
                   onClick={() => setSelectedMonth(m)}
-                  class={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
                     selectedMonth === m 
                       ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-600/30 scale-105' 
                       : 'bg-slate-900/90 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800'
@@ -442,25 +440,23 @@
             </div>
           </header>
 
-          <!-- Main Scrollable Screen Body -->
-          <main class="flex-1 p-4 space-y-4">
+          <main className="flex-1 p-4 space-y-4">
 
-            <!-- TAB 1: OVERVIEW & DASHBOARD -->
+            {/* TAB 1: OVERVIEW & DASHBOARD */}
             {activeTab === 'dashboard' && (
-              <div class="space-y-4">
+              <div className="space-y-4">
                 
-                <!-- Cash Flow Banner -->
-                <div class={`p-4 rounded-3xl border glass-card-accent flex items-center justify-between relative overflow-hidden ${
+                <div className={`p-4 rounded-3xl border glass-card-accent flex items-center justify-between relative overflow-hidden ${
                   netSavings >= 0 ? 'border-emerald-500/30' : 'border-rose-500/30'
                 }`}>
                   <div>
-                    <span class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest block mb-0.5">
+                    <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest block mb-0.5">
                       {selectedMonth} {selectedYear} Net Cash Flow
                     </span>
-                    <p class={`text-3xl font-black tracking-tight ${netSavings >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                    <p className={`text-3xl font-black tracking-tight ${netSavings >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                       {netSavings >= 0 ? '+' : ''}£{netSavings.toFixed(2)}
                     </p>
-                    <div class="flex items-center space-x-2 mt-1.5 text-[10px] text-slate-400 font-medium">
+                    <div className="flex items-center space-x-2 mt-1.5 text-[10px] text-slate-400 font-medium">
                       <span>In: £{(totalIncome + totalExtraIncome).toFixed(2)}</span>
                       <span>•</span>
                       <span>Out: £{totalExpenses.toFixed(2)}</span>
@@ -476,9 +472,8 @@
                   />
                 </div>
 
-                <!-- 12-Month Yearly Trend Chart -->
-                <div class="glass-card p-4 rounded-3xl space-y-3">
-                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+                <div className="glass-card p-4 rounded-3xl space-y-3">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
                     {selectedYear} Yearly Trend (Jan - Dec)
                   </h3>
 
@@ -489,29 +484,28 @@
                   />
                 </div>
 
-                <!-- Category Gauges -->
-                <div class="glass-card p-4 rounded-3xl space-y-3">
-                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+                <div className="glass-card p-4 rounded-3xl space-y-3">
+                  <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-300">
                     Spending Category Breakdown
                   </h3>
 
-                  <div class="grid grid-cols-3 gap-2 text-center">
-                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
                       <ProgressCircle percent={(categoryTotals.NEEDS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-indigo-400" />
-                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Needs</span>
-                      <span class="text-[10px] font-extrabold text-indigo-400">£{categoryTotals.NEEDS.toFixed(0)}</span>
+                      <span className="text-[10px] font-bold text-slate-200 mt-1.5">Needs</span>
+                      <span className="text-[10px] font-extrabold text-indigo-400">£{categoryTotals.NEEDS.toFixed(0)}</span>
                     </div>
 
-                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                    <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
                       <ProgressCircle percent={(categoryTotals.WANTS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-amber-400" />
-                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Wants</span>
-                      <span class="text-[10px] font-extrabold text-amber-400">£{categoryTotals.WANTS.toFixed(0)}</span>
+                      <span className="text-[10px] font-bold text-slate-200 mt-1.5">Wants</span>
+                      <span className="text-[10px] font-extrabold text-amber-400">£{categoryTotals.WANTS.toFixed(0)}</span>
                     </div>
 
-                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                    <div className="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
                       <ProgressCircle percent={(categoryTotals.SAVINGS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-emerald-400" />
-                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Savings</span>
-                      <span class="text-[10px] font-extrabold text-emerald-400">£{categoryTotals.SAVINGS.toFixed(0)}</span>
+                      <span className="text-[10px] font-bold text-slate-200 mt-1.5">Savings</span>
+                      <span className="text-[10px] font-extrabold text-emerald-400">£{categoryTotals.SAVINGS.toFixed(0)}</span>
                     </div>
                   </div>
                 </div>
@@ -519,13 +513,13 @@
               </div>
             )}
 
-            <!-- TAB 2: MAIN BUDGET GRID -->
+            {/* TAB 2: MAIN BUDGET GRID */}
             {activeTab === 'budget' && (
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Budget vs. Actual Grid</h2>
-                    <p class="text-xs text-slate-400">{selectedMonth} {selectedYear} Expenses</p>
+                    <h2 className="text-sm font-bold text-slate-200">Budget vs. Actual Grid</h2>
+                    <p className="text-xs text-slate-400">{selectedMonth} {selectedYear} Expenses</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -533,30 +527,30 @@
                       isNew: true,
                       item: { id: 'e_' + Date.now(), name: '', category: 'NEEDS', budget: 50, actual: 50, payer: 'David', dueDate: '1st', status: 'Pending' }
                     })}
-                    class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
+                    className="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Bill</span>
                   </button>
                 </div>
 
-                <div class="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 flex justify-between text-xs font-bold">
-                  <span class="text-slate-400">Budgeted: <strong class="text-slate-200">£{totalBudgetedExpenses.toFixed(2)}</strong></span>
-                  <span class="text-slate-400">Actual: <strong class="text-rose-400">£{totalExpenses.toFixed(2)}</strong></span>
-                  <span class="text-slate-400">Variance: <strong class={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-400" : "text-rose-400"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
+                <div className="p-3 bg-slate-900/90 rounded-2xl border border-slate-800 flex justify-between text-xs font-bold">
+                  <span className="text-slate-400">Budgeted: <strong className="text-slate-200">£{totalBudgetedExpenses.toFixed(2)}</strong></span>
+                  <span className="text-slate-400">Actual: <strong className="text-rose-400">£{totalExpenses.toFixed(2)}</strong></span>
+                  <span className="text-slate-400">Variance: <strong className={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-400" : "text-rose-400"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
                 </div>
 
-                <div class="space-y-2">
+                <div className="space-y-2">
                   {currentMonthObj.expenses.map(item => {
                     const variance = Number(item.budget || 0) - Number(item.actual || 0);
 
                     return (
-                      <div key={item.id} class="p-3.5 glass-card rounded-2xl space-y-2">
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center space-x-2.5">
+                      <div key={item.id} className="p-3.5 glass-card rounded-2xl space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2.5">
                             <button 
                               onClick={() => toggleExpenseStatus(item.id)}
-                              class={`px-2 py-0.5 rounded text-[10px] font-black uppercase transition-all ${
+                              className={`px-2 py-0.5 rounded text-[10px] font-black uppercase transition-all ${
                                 item.status === 'Paid' 
                                   ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
                                   : 'bg-slate-800 text-slate-400 border border-slate-700'
@@ -564,37 +558,37 @@
                             >
                               {item.status}
                             </button>
-                            <span class="text-xs font-bold text-slate-100">{item.name}</span>
+                            <span className="text-xs font-bold text-slate-100">{item.name}</span>
                           </div>
 
-                          <div class="flex items-center space-x-1.5">
-                            <span class={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                          <div className="flex items-center space-x-1.5">
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
                               item.payer === 'David' ? 'bg-indigo-500/20 text-indigo-400' :
                               item.payer === 'May' ? 'bg-fuchsia-500/20 text-fuchsia-400' : 'bg-slate-800 text-slate-300'
                             }`}>
                               {item.payer}
                             </span>
-                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} class="p-1 text-slate-400 hover:text-indigo-400">
+                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} className="p-1 text-slate-400 hover:text-indigo-400">
                               <Icon name="edit-3" size={14} />
                             </button>
-                            <button onClick={() => deleteExpense(item.id)} class="p-1 text-slate-400 hover:text-rose-400">
+                            <button onClick={() => deleteExpense(item.id)} className="p-1 text-slate-400 hover:text-rose-400">
                               <Icon name="trash-2" size={14} />
                             </button>
                           </div>
                         </div>
 
-                        <div class="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/60 text-[10px]">
+                        <div className="grid grid-cols-3 gap-2 pt-1 border-t border-slate-800/60 text-[10px]">
                           <div>
-                            <span class="text-slate-500 block">Budget</span>
-                            <span class="font-bold text-slate-300">£{Number(item.budget || 0).toFixed(2)}</span>
+                            <span className="text-slate-500 block">Budget</span>
+                            <span className="font-bold text-slate-300">£{Number(item.budget || 0).toFixed(2)}</span>
                           </div>
                           <div>
-                            <span class="text-slate-500 block">Actual</span>
-                            <span class="font-black text-rose-400">£{Number(item.actual || 0).toFixed(2)}</span>
+                            <span className="text-slate-500 block">Actual</span>
+                            <span className="font-black text-rose-400">£{Number(item.actual || 0).toFixed(2)}</span>
                           </div>
                           <div>
-                            <span class="text-slate-500 block">Variance</span>
-                            <span class={`font-bold ${variance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            <span className="text-slate-500 block">Variance</span>
+                            <span className={`font-bold ${variance >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
                               {variance >= 0 ? '+' : ''}£{variance.toFixed(2)}
                             </span>
                           </div>
@@ -608,11 +602,11 @@
 
             {/* TAB 3: EXTRA INCOME */}
             {activeTab === 'extra' && (
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Side Hustle Log</h2>
-                    <p class="text-xs text-slate-400">Piano, Spanish, Babysitting & Gigs</p>
+                    <h2 className="text-sm font-bold text-slate-200">Side Hustle Log</h2>
+                    <p className="text-xs text-slate-400">Piano, Spanish, Babysitting & Gigs</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -620,42 +614,42 @@
                       isNew: true,
                       item: { id: 'x_' + Date.now(), date: new Date().toISOString().split('T')[0], description: '', duration: '1h', price: 50, net: 50, status: 'Paid' }
                     })}
-                    class="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-emerald-600/30"
+                    className="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-emerald-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Log Gig</span>
                   </button>
                 </div>
 
-                <div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-3xl flex items-center justify-between">
+                <div className="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-3xl flex items-center justify-between">
                   <div>
-                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Monthly Side Hustles</span>
-                    <span class="text-2xl font-black text-emerald-400">£{totalExtraIncome.toFixed(2)}</span>
+                    <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Monthly Side Hustles</span>
+                    <span className="text-2xl font-black text-emerald-400">£{totalExtraIncome.toFixed(2)}</span>
                   </div>
-                  <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-2xl">
+                  <div className="p-3 bg-emerald-500/20 text-emerald-400 rounded-2xl">
                     <Icon name="coins" size={24} />
                   </div>
                 </div>
 
-                <div class="space-y-2">
+                <div className="space-y-2">
                   {currentMonthObj.extraIncome.map(item => (
-                    <div key={item.id} class="p-3.5 glass-card rounded-2xl flex items-center justify-between">
-                      <div class="flex items-center space-x-3">
-                        <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
+                    <div key={item.id} className="p-3.5 glass-card rounded-2xl flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
                           <Icon name="briefcase" size={18} />
                         </div>
                         <div>
-                          <p class="text-xs font-bold text-slate-100">{item.description}</p>
-                          <p class="text-[10px] text-slate-400">{item.date} • {item.duration || 'Session'}</p>
+                          <p className="text-xs font-bold text-slate-100">{item.description}</p>
+                          <p className="text-[10px] text-slate-400">{item.date} • {item.duration || 'Session'}</p>
                         </div>
                       </div>
 
-                      <div class="flex items-center space-x-2">
-                        <span class="text-xs font-black text-emerald-400">+£{Number(item.net || item.price).toFixed(2)}</span>
-                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} class="p-1.5 text-slate-400 hover:text-indigo-400">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-black text-emerald-400">+£{Number(item.net || item.price).toFixed(2)}</span>
+                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} className="p-1.5 text-slate-400 hover:text-indigo-400">
                           <Icon name="edit-3" size={14} />
                         </button>
-                        <button onClick={() => deleteExtraIncome(item.id)} class="p-1.5 text-slate-400 hover:text-rose-400">
+                        <button onClick={() => deleteExtraIncome(item.id)} className="p-1.5 text-slate-400 hover:text-rose-400">
                           <Icon name="trash-2" size={14} />
                         </button>
                       </div>
@@ -667,11 +661,11 @@
 
             {/* TAB 4: CHILDREN (AJ & EC) */}
             {activeTab === 'kids' && (
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Children's Finance Hub 👶</h2>
-                    <p class="text-xs text-slate-400">Child Benefit & Expense Allocations</p>
+                    <h2 className="text-sm font-bold text-slate-200">Children's Finance Hub 👶</h2>
+                    <p className="text-xs text-slate-400">Child Benefit & Expense Allocations</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -679,61 +673,61 @@
                       isNew: true,
                       item: { id: 'ke_' + Date.now(), name: '', category: 'Needs', amount: 20, child: 'AJ' }
                     })}
-                    class="px-3.5 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-violet-600/30"
+                    className="px-3.5 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-violet-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Child Expense</span>
                   </button>
                 </div>
 
-                <div class="p-4 rounded-3xl bg-gradient-to-tr from-violet-950/60 to-fuchsia-950/40 border border-violet-800/40 space-y-3">
-                  <div class="flex items-center justify-between">
+                <div className="p-4 rounded-3xl bg-gradient-to-tr from-violet-950/60 to-fuchsia-950/40 border border-violet-800/40 space-y-3">
+                  <div className="flex items-center justify-between">
                     <div>
-                      <span class="text-[10px] font-bold text-violet-300 uppercase tracking-widest block">Monthly Child Benefit</span>
-                      <span class="text-2xl font-black text-violet-200">£{kidsSummary.totalBenefit.toFixed(2)}</span>
+                      <span className="text-[10px] font-bold text-violet-300 uppercase tracking-widest block">Monthly Child Benefit</span>
+                      <span className="text-2xl font-black text-violet-200">£{kidsSummary.totalBenefit.toFixed(2)}</span>
                     </div>
-                    <div class="p-3 bg-violet-500/20 text-violet-300 rounded-2xl">
+                    <div className="p-3 bg-violet-500/20 text-violet-300 rounded-2xl">
                       <Icon name="baby" size={24} />
                     </div>
                   </div>
 
-                  <div class="grid grid-cols-4 gap-1.5 pt-2 border-t border-violet-800/30 text-center">
-                    <div class="p-2 bg-slate-900/80 rounded-xl">
-                      <span class="text-[9px] text-slate-400 block">J. ISA (15%)</span>
-                      <span class="text-xs font-bold text-indigo-400">£{kidsSummary.jISA.toFixed(2)}</span>
+                  <div className="grid grid-cols-4 gap-1.5 pt-2 border-t border-violet-800/30 text-center">
+                    <div className="p-2 bg-slate-900/80 rounded-xl">
+                      <span className="text-[9px] text-slate-400 block">J. ISA (15%)</span>
+                      <span className="text-xs font-bold text-indigo-400">£{kidsSummary.jISA.toFixed(2)}</span>
                     </div>
-                    <div class="p-2 bg-slate-900/80 rounded-xl">
-                      <span class="text-[9px] text-slate-400 block">Needs (30%)</span>
-                      <span class="text-xs font-bold text-emerald-400">£{kidsSummary.needs.toFixed(2)}</span>
+                    <div className="p-2 bg-slate-900/80 rounded-xl">
+                      <span className="text-[9px] text-slate-400 block">Needs (30%)</span>
+                      <span className="text-xs font-bold text-emerald-400">£{kidsSummary.needs.toFixed(2)}</span>
                     </div>
-                    <div class="p-2 bg-slate-900/80 rounded-xl">
-                      <span class="text-[9px] text-slate-400 block">Childcare (10%)</span>
-                      <span class="text-xs font-bold text-amber-400">£{kidsSummary.childcare.toFixed(2)}</span>
+                    <div className="p-2 bg-slate-900/80 rounded-xl">
+                      <span className="text-[9px] text-slate-400 block">Childcare (10%)</span>
+                      <span className="text-xs font-bold text-amber-400">£{kidsSummary.childcare.toFixed(2)}</span>
                     </div>
-                    <div class="p-2 bg-slate-900/80 rounded-xl">
-                      <span class="text-[9px] text-slate-400 block">Savings (45%)</span>
-                      <span class="text-xs font-bold text-violet-400">£{kidsSummary.futurePot.toFixed(2)}</span>
+                    <div className="p-2 bg-slate-900/80 rounded-xl">
+                      <span className="text-[9px] text-slate-400 block">Savings (45%)</span>
+                      <span className="text-xs font-bold text-violet-400">£{kidsSummary.futurePot.toFixed(2)}</span>
                     </div>
                   </div>
                 </div>
 
-                <div class="space-y-2">
-                  <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Kids Expense Log</h3>
+                <div className="space-y-2">
+                  <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider">Kids Expense Log</h3>
                   {(currentMonthObj.kids?.expenses || []).map(item => (
-                    <div key={item.id} class="p-3.5 glass-card rounded-2xl flex items-center justify-between">
-                      <div class="flex items-center space-x-3">
-                        <div class="p-2 bg-violet-500/10 text-violet-400 rounded-xl">
+                    <div key={item.id} className="p-3.5 glass-card rounded-2xl flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-violet-500/10 text-violet-400 rounded-xl">
                           <Icon name="sparkles" size={16} />
                         </div>
                         <div>
-                          <p class="text-xs font-bold text-slate-100">{item.name}</p>
-                          <span class="text-[10px] text-slate-400">Child: {item.child} • {item.category}</span>
+                          <p className="text-xs font-bold text-slate-100">{item.name}</p>
+                          <span className="text-[10px] text-slate-400">Child: {item.child} • {item.category}</span>
                         </div>
                       </div>
 
-                      <div class="flex items-center space-x-2">
-                        <span class="text-xs font-black text-rose-400">£{Number(item.amount).toFixed(2)}</span>
-                        <button onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })} class="p-1.5 text-slate-400 hover:text-indigo-400">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xs font-black text-rose-400">£{Number(item.amount).toFixed(2)}</span>
+                        <button onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })} className="p-1.5 text-slate-400 hover:text-indigo-400">
                           <Icon name="edit-3" size={14} />
                         </button>
                       </div>
@@ -743,13 +737,13 @@
               </div>
             )}
 
-            {/* TAB 5: POTS & DEBTS */}
+            {/* TAB 5: POTS */}
             {activeTab === 'pots' && (
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Savings Pots</h2>
-                    <p class="text-xs text-slate-400">Emergency, ISA & Goals</p>
+                    <h2 className="text-sm font-bold text-slate-200">Savings Pots</h2>
+                    <p className="text-xs text-slate-400">Emergency, ISA & Goals</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -757,44 +751,44 @@
                       isNew: true,
                       item: { id: 'p_' + Date.now(), name: '', balance: 0, target: 1000, icon: 'piggy-bank' }
                     })}
-                    class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
+                    className="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>New Pot</span>
                   </button>
                 </div>
 
-                <div class="space-y-3">
+                <div className="space-y-3">
                   {pots.map(pot => {
                     const percent = Math.min(100, Math.round((pot.balance / (pot.target || 1)) * 100));
                     return (
-                      <div key={pot.id} class="p-4 glass-card rounded-3xl space-y-2.5">
-                        <div class="flex items-center justify-between">
-                          <div class="flex items-center space-x-2.5">
-                            <div class="p-2.5 bg-indigo-500/20 text-indigo-400 rounded-2xl">
+                      <div key={pot.id} className="p-4 glass-card rounded-3xl space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center space-x-2.5">
+                            <div className="p-2.5 bg-indigo-500/20 text-indigo-400 rounded-2xl">
                               <Icon name={pot.icon || 'piggy-bank'} size={18} />
                             </div>
                             <div>
-                              <p class="text-xs font-bold text-slate-100">{pot.name}</p>
-                              <p class="text-[10px] text-slate-400">Goal: £{pot.target}</p>
+                              <p className="text-xs font-bold text-slate-100">{pot.name}</p>
+                              <p className="text-[10px] text-slate-400">Goal: £{pot.target}</p>
                             </div>
                           </div>
                           
-                          <div class="flex items-center space-x-2">
-                            <span class="text-sm font-black text-indigo-400">£{pot.balance.toFixed(2)}</span>
-                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} class="p-1.5 text-slate-400 hover:text-indigo-400">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm font-black text-indigo-400">£{pot.balance.toFixed(2)}</span>
+                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} className="p-1.5 text-slate-400 hover:text-indigo-400">
                               <Icon name="edit-3" size={14} />
                             </button>
                           </div>
                         </div>
 
-                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
-                          <div class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full rounded-full transition-all duration-700" style={{ width: `${percent}%` }}></div>
+                        <div className="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
+                          <div className="bg-gradient-to-r from-indigo-500 to-violet-500 h-full rounded-full transition-all duration-700" style={{ width: `${percent}%` }}></div>
                         </div>
 
-                        <div class="flex justify-between text-[10px] text-slate-400 font-medium">
+                        <div className="flex justify-between text-[10px] text-slate-400 font-medium">
                           <span>Target: £{pot.target}</span>
-                          <span class="font-bold text-indigo-300">{percent}% Reached</span>
+                          <span className="font-bold text-indigo-300">{percent}% Reached</span>
                         </div>
                       </div>
                     );
@@ -805,11 +799,11 @@
 
             {/* TAB 6: DEBTS */}
             {activeTab === 'debts' && (
-              <div class="space-y-3">
-                <div class="flex items-center justify-between">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Debt Repayments</h2>
-                    <p class="text-xs text-slate-400">Monteflor, Tita Norie, Clarence</p>
+                    <h2 className="text-sm font-bold text-slate-200">Debt Repayments</h2>
+                    <p className="text-xs text-slate-400">Monteflor, Tita Norie, Clarence</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -817,29 +811,29 @@
                       isNew: true,
                       item: { id: 'd_' + Date.now(), recipient: '', total: 500, balance: 500, comments: '' }
                     })}
-                    class="px-3.5 py-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-rose-600/30"
+                    className="px-3.5 py-2 bg-gradient-to-r from-rose-600 to-pink-600 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-rose-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Debt</span>
                   </button>
                 </div>
 
-                <div class="space-y-3">
+                <div className="space-y-3">
                   {debts.map(debt => (
-                    <div key={debt.id} class="p-4 glass-card rounded-3xl space-y-2">
-                      <div class="flex items-center justify-between">
+                    <div key={debt.id} className="p-4 glass-card rounded-3xl space-y-2">
+                      <div className="flex items-center justify-between">
                         <div>
-                          <span class="text-xs font-bold text-slate-100">{debt.recipient}</span>
-                          <p class="text-[10px] text-slate-400">{debt.comments}</p>
+                          <span className="text-xs font-bold text-slate-100">{debt.recipient}</span>
+                          <p className="text-[10px] text-slate-400">{debt.comments}</p>
                         </div>
-                        <div class="flex items-center space-x-2">
-                          <span class="text-sm font-black text-rose-400">£{debt.balance.toFixed(2)} Left</span>
-                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} class="p-1.5 text-slate-400 hover:text-indigo-400">
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-black text-rose-400">£{debt.balance.toFixed(2)} Left</span>
+                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} className="p-1.5 text-slate-400 hover:text-indigo-400">
                             <Icon name="edit-3" size={14} />
                           </button>
                         </div>
                       </div>
-                      <div class="flex justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/80">
+                      <div className="flex justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/80">
                         <span>Original: £{debt.total}</span>
                         <span>Paid: £{(debt.total - debt.balance).toFixed(2)}</span>
                       </div>
@@ -851,9 +845,8 @@
 
           </main>
 
-          <!-- Bottom iOS Navigation Bar -->
-          <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/80 p-2 z-40">
-            <div class="grid grid-cols-6 gap-1 text-center">
+          <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/80 p-2 z-40">
+            <div className="grid grid-cols-6 gap-1 text-center">
               {[
                 { id: 'dashboard', label: 'Overview', icon: 'layout-dashboard' },
                 { id: 'budget', label: 'Budget', icon: 'receipt' },
@@ -865,77 +858,76 @@
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  class={`flex flex-col items-center justify-center py-2 rounded-2xl transition-all duration-200 ${
+                  className={`flex flex-col items-center justify-center py-2 rounded-2xl transition-all duration-200 ${
                     activeTab === tab.id 
                       ? 'text-indigo-400 font-black bg-indigo-500/10 border border-indigo-500/20' 
                       : 'text-slate-400 font-semibold hover:text-slate-200'
                   }`}
                 >
                   <Icon name={tab.icon} size={18} />
-                  <span class="text-[9px] mt-1 tracking-tight">{tab.label}</span>
+                  <span className="text-[9px] mt-1 tracking-tight">{tab.label}</span>
                 </button>
               ))}
             </div>
           </nav>
 
-          <!-- Universal Edit / Create Modal -->
           {editModal && (
-            <div class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
-              <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl">
-                <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-                  <h3 class="text-xs font-extrabold text-slate-100 uppercase tracking-widest">
+            <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+                  <h3 className="text-xs font-extrabold text-slate-100 uppercase tracking-widest">
                     {editModal.isNew ? 'Add' : 'Edit'} {editModal.type.toUpperCase()}
                   </h3>
-                  <button onClick={() => setEditModal(null)} class="text-slate-400 hover:text-white">
+                  <button onClick={() => setEditModal(null)} className="text-slate-400 hover:text-white">
                     <Icon name="x" size={18} />
                   </button>
                 </div>
 
-                <form onSubmit={handleSaveModal} class="space-y-3">
+                <form onSubmit={handleSaveModal} className="space-y-3">
                   
                   {editModal.type === 'expense' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Expense Name</label>
+                        <label className="text-[10px] text-slate-400 block mb-1">Expense Name</label>
                         <input 
                           type="text" 
                           required
                           value={editModal.item.name} 
                           onChange={(e) => setEditModal({...editModal, item: {...editModal.item, name: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                         />
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Budget (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Budget (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.budget} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, budget: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Actual (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Actual (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.actual} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, actual: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Payer</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Payer</label>
                           <select 
                             value={editModal.item.payer} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, payer: e.target.value}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none"
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none"
                           >
                             <option value="David">David (Hubby)</option>
                             <option value="May">May (Wifey)</option>
@@ -945,12 +937,12 @@
                           </select>
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Due Date</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Due Date</label>
                           <input 
                             type="text" 
                             value={editModal.item.dueDate} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, dueDate: e.target.value}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                       </div>
@@ -960,34 +952,34 @@
                   {editModal.type === 'extra' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Gig Description</label>
+                        <label className="text-[10px] text-slate-400 block mb-1">Gig Description</label>
                         <input 
                           type="text" 
                           required
                           value={editModal.item.description} 
                           onChange={(e) => setEditModal({...editModal, item: {...editModal.item, description: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                         />
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Net Income (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Net Income (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.net} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, net: parseFloat(e.target.value) || 0, price: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Duration</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Duration</label>
                           <input 
                             type="text" 
                             value={editModal.item.duration} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, duration: e.target.value}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                       </div>
@@ -997,36 +989,36 @@
                   {editModal.type === 'pot' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Pot Name</label>
+                        <label className="text-[10px] text-slate-400 block mb-1">Pot Name</label>
                         <input 
                           type="text" 
                           required
                           value={editModal.item.name} 
                           onChange={(e) => setEditModal({...editModal, item: {...editModal.item, name: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                         />
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Balance (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Balance (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.balance} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, balance: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Target (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Target (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.target} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, target: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                       </div>
@@ -1036,53 +1028,53 @@
                   {editModal.type === 'debt' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Creditor Name</label>
+                        <label className="text-[10px] text-slate-400 block mb-1">Creditor Name</label>
                         <input 
                           type="text" 
                           required
                           value={editModal.item.recipient} 
                           onChange={(e) => setEditModal({...editModal, item: {...editModal.item, recipient: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                         />
                       </div>
-                      <div class="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Total (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Total (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.total} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, total: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Balance (£)</label>
+                          <label className="text-[10px] text-slate-400 block mb-1">Balance (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
                             required
                             value={editModal.item.balance} 
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, balance: parseFloat(e.target.value) || 0}})}
-                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                            className="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
                       </div>
                     </>
                   )}
 
-                  <div class="pt-2 flex items-center space-x-2">
+                  <div className="pt-2 flex items-center space-x-2">
                     <button 
                       type="button" 
                       onClick={() => setEditModal(null)}
-                      class="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-bold"
+                      className="w-1/2 bg-slate-800 hover:bg-slate-700 text-slate-300 py-2.5 rounded-xl text-xs font-bold"
                     >
                       Cancel
                     </button>
                     <button 
                       type="submit" 
-                      class="w-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30"
+                      className="w-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30"
                     >
                       Save
                     </button>

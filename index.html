@@ -12,7 +12,7 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- React 18 & ReactDOM UMD -->
+  <!-- React 18 & ReactDOM UMD (Cloudflare CDN) -->
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
   <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
 
@@ -24,7 +24,7 @@
       -webkit-tap-highlight-color: transparent;
       user-select: none;
       -webkit-user-select: none;
-      background-color: #0f172a;
+      background-color: #0b0f19;
     }
     input, select, button, textarea {
       user-select: auto;
@@ -37,12 +37,23 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-glow {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased selection:bg-indigo-500 selection:text-white">
   <div id="root">
     <div class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
-      <div class="w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+      <div class="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
       <p class="text-slate-400 text-sm font-medium">Loading Family Budget App...</p>
     </div>
   </div>
@@ -50,7 +61,7 @@
   <script type="text/babel">
     const { useState, useEffect, useMemo } = React;
 
-    // --- SVG Icon Renderer Component ---
+    // --- Inline SVG Icon Renderer Component ---
     const Icon = ({ name, size = 18, className = "" }) => {
       const props = {
         width: size,
@@ -65,44 +76,69 @@
       };
 
       switch (name) {
-        case 'wallet':
-          return <svg {...props}><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0-0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3v4a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V7"/><path d="M18 12h.01"/></svg>;
-        case 'trending-up':
-          return <svg {...props}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
-        case 'trending-down':
-          return <svg {...props}><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
-        case 'arrow-down-left':
-          return <svg {...props}><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>;
-        case 'arrow-up-right':
-          return <svg {...props}><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>;
-        case 'plus':
-          return <svg {...props}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
-        case 'briefcase':
-          return <svg {...props}><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
-        case 'piggy-bank':
-          return <svg {...props}><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-3.5c1-.5 1.5-1 2.5-2 1.5-1.5 1.5-3.5 1.5-4.5 0-2.5-1.5-4-3-4z"/><circle cx="7" cy="11" r="1"/></svg>;
-        case 'credit-card':
-          return <svg {...props}><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
-        case 'layout-dashboard':
-          return <svg {...props}><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>;
-        case 'receipt':
-          return <svg {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>;
-        case 'coins':
-          return <svg {...props}><circle cx="8" cy="8" r="6"/><path d="M18 8A6 6 0 0 1 6 18"/><path d="M7 6h1v4"/><path d="M17 12h1v4"/></svg>;
-        case 'trash-2':
-          return <svg {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>;
-        case 'edit-3':
-          return <svg {...props}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>;
-        case 'x':
-          return <svg {...props}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
-        case 'check':
-          return <svg {...props}><polyline points="20 6 9 17 4 12"/></svg>;
-        default:
-          return <svg {...props}><circle cx="12" cy="12" r="10"/></svg>;
+        case 'wallet': return <svg {...props}><path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0-0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3v4a1 1 0 0 1-1 1H5a2 2 0 0 1-2-2V7"/><path d="M18 12h.01"/></svg>;
+        case 'trending-up': return <svg {...props}><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>;
+        case 'trending-down': return <svg {...props}><polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/><polyline points="16 17 22 17 22 11"/></svg>;
+        case 'arrow-down-left': return <svg {...props}><line x1="17" y1="7" x2="7" y2="17"/><polyline points="17 17 7 17 7 7"/></svg>;
+        case 'arrow-up-right': return <svg {...props}><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>;
+        case 'plus': return <svg {...props}><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>;
+        case 'briefcase': return <svg {...props}><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>;
+        case 'piggy-bank': return <svg {...props}><path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h4v-2h3v2h4v-3.5c1-.5 1.5-1 2.5-2 1.5-1.5 1.5-3.5 1.5-4.5 0-2.5-1.5-4-3-4z"/><circle cx="7" cy="11" r="1"/></svg>;
+        case 'credit-card': return <svg {...props}><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>;
+        case 'layout-dashboard': return <svg {...props}><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>;
+        case 'receipt': return <svg {...props}><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1-2-1z"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>;
+        case 'coins': return <svg {...props}><circle cx="8" cy="8" r="6"/><path d="M18 8A6 6 0 0 1 6 18"/><path d="M7 6h1v4"/><path d="M17 12h1v4"/></svg>;
+        case 'baby': return <svg {...props}><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/><path d="M12 13v3"/><path d="M10 18h4"/></svg>;
+        case 'sparkles': return <svg {...props}><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg>;
+        case 'pie-chart': return <svg {...props}><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>;
+        case 'trash-2': return <svg {...props}><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>;
+        case 'edit-3': return <svg {...props}><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>;
+        case 'x': return <svg {...props}><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
+        case 'check': return <svg {...props}><polyline points="20 6 9 17 4 12"/></svg>;
+        default: return <svg {...props}><circle cx="12" cy="12" r="10"/></svg>;
       }
     };
 
-    // Default Seed Data
+    // --- Circular Progress Gauge Component ---
+    const ProgressCircle = ({ percent = 0, size = 64, strokeWidth = 6, color = "stroke-indigo-500", label }) => {
+      const radius = (size - strokeWidth) / 2;
+      const circumference = 2 * Math.PI * radius;
+      const strokeDashoffset = circumference - (Math.min(100, Math.max(0, percent)) / 100) * circumference;
+
+      return (
+        <div class="relative flex flex-col items-center justify-center" style={{ width: size, height: size }}>
+          <svg width={size} height={size} class="transform -rotate-90">
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              stroke="currentColor"
+              strokeWidth={strokeWidth}
+              className="text-slate-800"
+              fill="transparent"
+            />
+            <circle
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              stroke="currentColor"
+              strokeWidth={strokeWidth}
+              className={`${color} transition-all duration-700 ease-out`}
+              fill="transparent"
+              strokeDasharray={circumference}
+              strokeDashoffset={strokeDashoffset}
+              strokeLinecap="round"
+            />
+          </svg>
+          <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+            <span class="text-[11px] font-black tracking-tighter text-slate-100">{Math.round(percent)}%</span>
+            {label && <span class="text-[8px] text-slate-400 -mt-1 font-semibold">{label}</span>}
+          </div>
+        </div>
+      );
+    };
+
+    // --- Seed Data from Spreadsheet & Notebooks ---
     const INITIAL_DEBTS = [
       { id: 'd1', recipient: 'Monteflor', total: 1500, balance: 1500, comments: '1st month rent/deposit' },
       { id: 'd2', recipient: 'Tita Norie', total: 604.52, balance: 604.52, comments: '700 EUR 1st month rent/deposit' },
@@ -149,10 +185,9 @@
     const App = () => {
       const [selectedYear, setSelectedYear] = useState(2026);
       const [selectedMonth, setSelectedMonth] = useState('January');
-      const [activeTab, setActiveTab] = useState('dashboard');
+      const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'budget', 'extra', 'kids', 'pots', 'debts'
       
-      // Edit Modal State
-      const [editModal, setEditModal] = useState(null); // { type: 'expense'|'extra'|'pot'|'debt', item: {...} }
+      const [editModal, setEditModal] = useState(null); // { type: 'expense'|'extra'|'pot'|'debt'|'kidExpense', isNew: bool, item: {} }
 
       const [debts, setDebts] = useState(() => {
         const saved = localStorage.getItem('fb_debts');
@@ -179,7 +214,16 @@
                 { id: 'x1', date: `${yr}-01-17`, description: 'Piano lessons', duration: '3h', price: 75, status: 'Paid', net: 75 },
                 { id: 'x2', date: `${yr}-01-22`, description: 'Spanish lessons', duration: '3h', price: 45, status: 'Paid', net: 45 },
                 { id: 'x3', date: `${yr}-01-30`, description: 'Babysitting / Nanny', duration: '8.5h', price: 150, status: 'Paid', net: 150 }
-              ]
+              ],
+              kids: {
+                benefitAJ: 104.20,
+                benefitEC: 69.00,
+                giftIn: 0,
+                expenses: [
+                  { id: 'ke1', name: 'School Supplies & Uniforms', category: 'Needs', amount: 45.50, child: 'AJ' },
+                  { id: 'ke2', name: 'Learning Apps & Toys', category: 'Wants', amount: 20.00, child: 'EC' }
+                ]
+              }
             };
           });
         });
@@ -200,11 +244,12 @@
 
       const currentMonthObj = useMemo(() => {
         if (!monthlyData[selectedYear] || !monthlyData[selectedYear][selectedMonth]) {
-          return { incomes: [], expenses: [], extraIncome: [] };
+          return { incomes: [], expenses: [], extraIncome: [], kids: { benefitAJ: 104.2, benefitEC: 69, giftIn: 0, expenses: [] } };
         }
         return monthlyData[selectedYear][selectedMonth];
       }, [monthlyData, selectedYear, selectedMonth]);
 
+      // Calculation Summaries
       const totalIncome = useMemo(() => {
         return currentMonthObj.incomes.reduce((sum, item) => sum + Number(item.amount || 0), 0);
       }, [currentMonthObj.incomes]);
@@ -221,7 +266,34 @@
         return (totalIncome + totalExtraIncome) - totalExpenses;
       }, [totalIncome, totalExtraIncome, totalExpenses]);
 
-      // --- EXPENSE CRUD ---
+      // Category Allocations
+      const categoryTotals = useMemo(() => {
+        const cats = { NEEDS: 0, WANTS: 0, SAVINGS: 0 };
+        currentMonthObj.expenses.forEach(e => {
+          const c = e.category ? e.category.toUpperCase() : 'NEEDS';
+          cats[c] = (cats[c] || 0) + Number(e.actual || e.budget || 0);
+        });
+        return cats;
+      }, [currentMonthObj.expenses]);
+
+      // Children Benefit Allocations (15% Junior ISA, 30% Needs, 10% Childcare, 45% Future Pot)
+      const kidsSummary = useMemo(() => {
+        const k = currentMonthObj.kids || { benefitAJ: 104.2, benefitEC: 69, giftIn: 0, expenses: [] };
+        const totalBenefit = Number(k.benefitAJ || 0) + Number(k.benefitEC || 0) + Number(k.giftIn || 0);
+        const totalKidsExpenses = (k.expenses || []).reduce((sum, e) => sum + Number(e.amount || 0), 0);
+        
+        return {
+          totalBenefit,
+          jISA: totalBenefit * 0.15,
+          needs: totalBenefit * 0.30,
+          childcare: totalBenefit * 0.10,
+          futurePot: totalBenefit * 0.45,
+          totalKidsExpenses,
+          surplus: totalBenefit - totalKidsExpenses
+        };
+      }, [currentMonthObj.kids]);
+
+      // Actions & Handlers
       const toggleExpenseStatus = (id) => {
         setMonthlyData(prev => {
           const updated = JSON.parse(JSON.stringify(prev));
@@ -235,14 +307,6 @@
         });
       };
 
-      const addExpenseItem = () => {
-        setEditModal({
-          type: 'expense',
-          isNew: true,
-          item: { id: 'e_' + Date.now(), name: '', category: 'NEEDS', budget: 50, actual: 50, payer: 'Both', dueDate: '1st', status: 'Pending' }
-        });
-      };
-
       const deleteExpense = (id) => {
         if (!confirm('Are you sure you want to delete this expense?')) return;
         setMonthlyData(prev => {
@@ -252,17 +316,8 @@
         });
       };
 
-      // --- EXTRA INCOME CRUD ---
-      const addExtraIncomeItem = () => {
-        setEditModal({
-          type: 'extra',
-          isNew: true,
-          item: { id: 'x_' + Date.now(), date: new Date().toISOString().split('T')[0], description: '', duration: '1h', price: 50, net: 50, status: 'Paid' }
-        });
-      };
-
       const deleteExtraIncome = (id) => {
-        if (!confirm('Are you sure you want to delete this income entry?')) return;
+        if (!confirm('Are you sure you want to delete this side hustle entry?')) return;
         setMonthlyData(prev => {
           const updated = JSON.parse(JSON.stringify(prev));
           updated[selectedYear][selectedMonth].extraIncome = updated[selectedYear][selectedMonth].extraIncome.filter(x => x.id !== id);
@@ -270,35 +325,15 @@
         });
       };
 
-      // --- POTS CRUD ---
-      const addPotItem = () => {
-        setEditModal({
-          type: 'pot',
-          isNew: true,
-          item: { id: 'p_' + Date.now(), name: '', balance: 0, target: 1000, icon: 'piggy-bank' }
+      const deleteKidExpense = (id) => {
+        if (!confirm('Are you sure you want to delete this child expense?')) return;
+        setMonthlyData(prev => {
+          const updated = JSON.parse(JSON.stringify(prev));
+          updated[selectedYear][selectedMonth].kids.expenses = updated[selectedYear][selectedMonth].kids.expenses.filter(k => k.id !== id);
+          return updated;
         });
       };
 
-      const deletePot = (id) => {
-        if (!confirm('Are you sure you want to delete this savings pot?')) return;
-        setPots(prev => prev.filter(p => p.id !== id));
-      };
-
-      // --- DEBTS CRUD ---
-      const addDebtItem = () => {
-        setEditModal({
-          type: 'debt',
-          isNew: true,
-          item: { id: 'd_' + Date.now(), recipient: '', total: 500, balance: 500, comments: '' }
-        });
-      };
-
-      const deleteDebt = (id) => {
-        if (!confirm('Are you sure you want to delete this debt tracker?')) return;
-        setDebts(prev => prev.filter(d => d.id !== id));
-      };
-
-      // --- SAVE MODAL CHANGES ---
       const handleSaveModal = (e) => {
         e.preventDefault();
         const { type, isNew, item } = editModal;
@@ -307,9 +342,8 @@
           setMonthlyData(prev => {
             const updated = JSON.parse(JSON.stringify(prev));
             const list = updated[selectedYear][selectedMonth].expenses;
-            if (isNew) {
-              list.push(item);
-            } else {
+            if (isNew) list.push(item);
+            else {
               const idx = list.findIndex(e => e.id === item.id);
               if (idx !== -1) list[idx] = item;
             }
@@ -319,49 +353,53 @@
           setMonthlyData(prev => {
             const updated = JSON.parse(JSON.stringify(prev));
             const list = updated[selectedYear][selectedMonth].extraIncome;
-            if (isNew) {
-              list.push(item);
-            } else {
+            if (isNew) list.push(item);
+            else {
               const idx = list.findIndex(x => x.id === item.id);
               if (idx !== -1) list[idx] = item;
             }
             return updated;
           });
+        } else if (type === 'kidExpense') {
+          setMonthlyData(prev => {
+            const updated = JSON.parse(JSON.stringify(prev));
+            const list = updated[selectedYear][selectedMonth].kids.expenses;
+            if (isNew) list.push(item);
+            else {
+              const idx = list.findIndex(k => k.id === item.id);
+              if (idx !== -1) list[idx] = item;
+            }
+            return updated;
+          });
         } else if (type === 'pot') {
-          setPots(prev => {
-            if (isNew) return [...prev, item];
-            return prev.map(p => p.id === item.id ? item : p);
-          });
+          setPots(prev => isNew ? [...prev, item] : prev.map(p => p.id === item.id ? item : p));
         } else if (type === 'debt') {
-          setDebts(prev => {
-            if (isNew) return [...prev, item];
-            return prev.map(d => d.id === item.id ? item : d);
-          });
+          setDebts(prev => isNew ? [...prev, item] : prev.map(d => d.id === item.id ? item : d));
         }
 
         setEditModal(null);
       };
 
       return (
-        <div class="flex flex-col min-h-screen max-w-md mx-auto bg-slate-900 border-x border-slate-800 shadow-2xl pb-24">
+        <div class="flex flex-col min-h-screen max-w-md mx-auto bg-slate-950 border-x border-slate-900 shadow-2xl pb-24">
           
-          {/* Top Sticky Header */}
-          <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 p-4">
+          {/* Top Header */}
+          <header class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur-xl border-b border-slate-800/80 p-4">
             <div class="flex items-center justify-between mb-3">
-              <div class="flex items-center space-x-2">
-                <div class="p-2 bg-indigo-600/20 text-indigo-400 rounded-xl">
-                  <Icon name="wallet" size={22} />
+              <div class="flex items-center space-x-2.5">
+                <div class="p-2.5 bg-gradient-to-tr from-indigo-600 to-violet-500 text-white rounded-2xl shadow-lg shadow-indigo-500/20">
+                  <Icon name="wallet" size={20} />
                 </div>
                 <div>
-                  <h1 class="text-base font-bold leading-tight">Family Budget</h1>
-                  <p class="text-xs text-slate-400">Finance Tracker</p>
+                  <h1 class="text-base font-black tracking-tight text-white leading-tight">Family Budget</h1>
+                  <p class="text-[10px] text-indigo-400 font-semibold tracking-wide uppercase">Interactive Multi-Year Engine</p>
                 </div>
               </div>
               
               <select 
                 value={selectedYear} 
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
-                class="bg-slate-800 text-xs font-bold text-indigo-400 px-3 py-1.5 rounded-lg border border-slate-700 outline-none"
+                class="bg-slate-900 text-xs font-bold text-indigo-400 px-3 py-2 rounded-xl border border-indigo-500/30 outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
               >
                 <option value={2024}>2024</option>
                 <option value={2025}>2025</option>
@@ -370,15 +408,16 @@
               </select>
             </div>
 
+            {/* Horizontal Month Bar */}
             <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1">
               {MONTH_NAMES.map(m => (
                 <button
                   key={m}
                   onClick={() => setSelectedMonth(m)}
-                  class={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                  class={`px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-200 ${
                     selectedMonth === m 
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30' 
-                      : 'bg-slate-800 text-slate-400 hover:bg-slate-700'
+                      ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-md shadow-indigo-600/30 scale-105' 
+                      : 'bg-slate-900/90 text-slate-400 hover:bg-slate-800 hover:text-slate-200 border border-slate-800'
                   }`}
                 >
                   {m.substring(0, 3)}
@@ -387,118 +426,166 @@
             </div>
           </header>
 
-          {/* Main Content */}
+          {/* Main Display Body */}
           <main class="flex-1 p-4 space-y-4">
 
-            {/* Dashboard Tab */}
+            {/* TAB 1: OVERVIEW & RICH DASHBOARD */}
             {activeTab === 'dashboard' && (
               <div class="space-y-4">
+                
+                {/* Main Cash Flow Banner */}
+                <div class={`p-4 rounded-3xl border glass-card-glow flex items-center justify-between relative overflow-hidden ${
+                  netSavings >= 0 ? 'border-emerald-500/30' : 'border-rose-500/30'
+                }`}>
+                  <div class="relative z-10">
+                    <span class="text-[10px] font-bold text-indigo-300 uppercase tracking-widest block mb-0.5">
+                      {selectedMonth} {selectedYear} Cash Flow
+                    </span>
+                    <p class={`text-3xl font-black tracking-tight ${netSavings >= 0 ? 'text-emerald-400' : 'text-rose-400'}`}>
+                      {netSavings >= 0 ? '+' : ''}£{netSavings.toFixed(2)}
+                    </p>
+                    <div class="flex items-center space-x-2 mt-1.5 text-[10px] text-slate-400">
+                      <span>In: £{(totalIncome + totalExtraIncome).toFixed(2)}</span>
+                      <span>•</span>
+                      <span>Out: £{totalExpenses.toFixed(2)}</span>
+                    </div>
+                  </div>
+
+                  <ProgressCircle 
+                    percent={totalIncome + totalExtraIncome > 0 ? (totalExpenses / (totalIncome + totalExtraIncome)) * 100 : 0} 
+                    size={72} 
+                    strokeWidth={7}
+                    color={netSavings >= 0 ? "stroke-emerald-400" : "stroke-rose-500"}
+                    label="Spent"
+                  />
+                </div>
+
+                {/* KPI Summary Cards */}
                 <div class="grid grid-cols-2 gap-3">
-                  <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/60">
-                    <div class="flex items-center space-x-1.5 text-xs text-slate-400 mb-1">
+                  <div class="glass-card p-3.5 rounded-2xl">
+                    <div class="flex items-center space-x-1.5 text-[11px] font-bold text-slate-400 mb-1">
                       <Icon name="arrow-down-left" size={14} class="text-emerald-400" />
                       <span>Total Income</span>
                     </div>
-                    <p class="text-lg font-extrabold text-emerald-400">£{(totalIncome + totalExtraIncome).toFixed(2)}</p>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Base + Extra Income</p>
+                    <p class="text-lg font-black text-emerald-400">£{(totalIncome + totalExtraIncome).toFixed(2)}</p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">Base £{totalIncome.toFixed(0)} • Side £{totalExtraIncome.toFixed(0)}</p>
                   </div>
 
-                  <div class="bg-slate-800/80 p-3.5 rounded-2xl border border-slate-700/60">
-                    <div class="flex items-center space-x-1.5 text-xs text-slate-400 mb-1">
+                  <div class="glass-card p-3.5 rounded-2xl">
+                    <div class="flex items-center space-x-1.5 text-[11px] font-bold text-slate-400 mb-1">
                       <Icon name="arrow-up-right" size={14} class="text-rose-400" />
-                      <span>Total Expenses</span>
+                      <span>Outgoings</span>
                     </div>
-                    <p class="text-lg font-extrabold text-rose-400">£{totalExpenses.toFixed(2)}</p>
-                    <p class="text-[10px] text-slate-500 mt-0.5">Monthly Outgoings</p>
+                    <p class="text-lg font-black text-rose-400">£{totalExpenses.toFixed(2)}</p>
+                    <p class="text-[10px] text-slate-500 mt-0.5">{currentMonthObj.expenses.length} Total Bills</p>
                   </div>
                 </div>
 
-                <div class={`p-4 rounded-2xl border flex items-center justify-between ${
-                  netSavings >= 0 
-                    ? 'bg-emerald-950/40 border-emerald-800/50 text-emerald-300' 
-                    : 'bg-rose-950/40 border-rose-800/50 text-rose-300'
-                }`}>
-                  <div>
-                    <span class="text-xs font-semibold uppercase tracking-wider block opacity-80">
-                      {selectedMonth} {selectedYear} Cash Flow
-                    </span>
-                    <span class="text-2xl font-black">
-                      {netSavings >= 0 ? '+' : ''}£{netSavings.toFixed(2)}
-                    </span>
-                  </div>
-                  <div class={`p-3 rounded-xl ${netSavings >= 0 ? 'bg-emerald-500/20' : 'bg-rose-500/20'}`}>
-                    <Icon name={netSavings >= 0 ? 'trending-up' : 'trending-down'} size={24} />
+                {/* Category Split Gauges */}
+                <div class="glass-card p-4 rounded-3xl space-y-3">
+                  <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+                    <span>Spending Categories</span>
+                    <Icon name="pie-chart" size={16} class="text-indigo-400" />
+                  </h3>
+
+                  <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                      <ProgressCircle percent={(categoryTotals.NEEDS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-indigo-400" />
+                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Needs</span>
+                      <span class="text-[10px] font-extrabold text-indigo-400">£{categoryTotals.NEEDS.toFixed(0)}</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                      <ProgressCircle percent={(categoryTotals.WANTS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-amber-400" />
+                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Wants</span>
+                      <span class="text-[10px] font-extrabold text-amber-400">£{categoryTotals.WANTS.toFixed(0)}</span>
+                    </div>
+
+                    <div class="p-2.5 bg-slate-900/80 rounded-2xl border border-slate-800 flex flex-col items-center">
+                      <ProgressCircle percent={(categoryTotals.SAVINGS / (totalExpenses || 1)) * 100} size={48} strokeWidth={5} color="stroke-emerald-400" />
+                      <span class="text-[10px] font-bold text-slate-200 mt-1.5">Savings</span>
+                      <span class="text-[10px] font-extrabold text-emerald-400">£{categoryTotals.SAVINGS.toFixed(0)}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div class="bg-slate-800/60 rounded-2xl border border-slate-800 p-4">
-                  <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">
-                      Bills Preview ({selectedMonth})
+                {/* Quick Bills Preview */}
+                <div class="glass-card p-4 rounded-3xl space-y-3">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-300">
+                      Top Bills ({selectedMonth})
                     </h3>
-                    <button onClick={() => setActiveTab('budget')} class="text-xs text-indigo-400 font-medium hover:underline">
-                      View All
+                    <button onClick={() => setActiveTab('budget')} class="text-xs text-indigo-400 font-bold hover:underline">
+                      View All ({currentMonthObj.expenses.length})
                     </button>
                   </div>
 
                   <div class="space-y-2">
-                    {currentMonthObj.expenses.slice(0, 5).map(item => (
-                      <div key={item.id} class="flex items-center justify-between p-2.5 rounded-xl bg-slate-800/90 border border-slate-700/50">
+                    {currentMonthObj.expenses.slice(0, 4).map(item => (
+                      <div key={item.id} class="flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 border border-slate-800/80">
                         <div class="flex items-center space-x-3">
                           <button 
                             onClick={() => toggleExpenseStatus(item.id)}
-                            class={`w-5 h-5 rounded-md flex items-center justify-center text-xs ${
-                              item.status === 'Paid' ? 'bg-emerald-500 text-slate-900 font-bold' : 'bg-slate-700 text-transparent'
+                            class={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-bold transition-all ${
+                              item.status === 'Paid' ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20' : 'bg-slate-800 text-slate-600 border border-slate-700'
                             }`}
                           >
                             ✓
                           </button>
                           <div>
-                            <p class="text-xs font-bold text-slate-200">{item.name}</p>
+                            <p class="text-xs font-bold text-slate-100">{item.name}</p>
                             <p class="text-[10px] text-slate-400">Due {item.dueDate} • {item.payer}</p>
                           </div>
                         </div>
-                        <span class="text-xs font-bold text-slate-100">£{Number(item.actual || item.budget).toFixed(2)}</span>
+                        <span class="text-xs font-black text-slate-100">£{Number(item.actual || item.budget).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
+
               </div>
             )}
 
-            {/* Monthly Budget Tab */}
+            {/* TAB 2: MONTHLY BUDGET & BILLS */}
             {activeTab === 'budget' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                  <h2 class="text-sm font-bold text-slate-200">Monthly Expenses & Bills</h2>
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-200">Monthly Expenses & Bills</h2>
+                    <p class="text-xs text-slate-400">{selectedMonth} {selectedYear} Outgoings</p>
+                  </div>
                   <button 
-                    onClick={addExpenseItem}
-                    class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1"
+                    onClick={() => setEditModal({
+                      type: 'expense',
+                      isNew: true,
+                      item: { id: 'e_' + Date.now(), name: '', category: 'NEEDS', budget: 50, actual: 50, payer: 'Both', dueDate: '1st', status: 'Pending' }
+                    })}
+                    class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
                   >
                     <Icon name="plus" size={14} />
-                    <span>Add Expense</span>
+                    <span>Add Bill</span>
                   </button>
                 </div>
 
                 <div class="space-y-2">
                   {currentMonthObj.expenses.map(item => (
-                    <div key={item.id} class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/60 flex items-center justify-between">
+                    <div key={item.id} class="p-3.5 glass-card rounded-2xl flex items-center justify-between">
                       <div class="flex items-center space-x-3">
                         <button 
                           onClick={() => toggleExpenseStatus(item.id)}
-                          class={`px-2 py-1 rounded-lg text-[10px] font-bold tracking-wide uppercase transition-all ${
+                          class={`px-2.5 py-1 rounded-lg text-[10px] font-black tracking-wider uppercase transition-all ${
                             item.status === 'Paid' 
                               ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' 
                               : item.status === 'Scheduled' 
                               ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                              : 'bg-slate-700 text-slate-400 border border-slate-600'
+                              : 'bg-slate-800 text-slate-400 border border-slate-700'
                           }`}
                         >
                           {item.status}
                         </button>
                         <div>
                           <p class="text-xs font-bold text-slate-100">{item.name}</p>
-                          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-700/60 text-slate-300 font-medium">
+                          <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-medium border border-slate-700/50">
                             Payer: {item.payer}
                           </span>
                         </div>
@@ -506,18 +593,18 @@
 
                       <div class="flex items-center space-x-2">
                         <div class="text-right">
-                          <p class="text-xs font-extrabold text-slate-100">£{Number(item.actual || item.budget).toFixed(2)}</p>
+                          <p class="text-xs font-black text-slate-100">£{Number(item.actual || item.budget).toFixed(2)}</p>
                           <p class="text-[10px] text-slate-400">Due {item.dueDate}</p>
                         </div>
                         <button 
                           onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })}
-                          class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-700/40 rounded-lg"
+                          class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                         >
                           <Icon name="edit-3" size={14} />
                         </button>
                         <button 
                           onClick={() => deleteExpense(item.id)}
-                          class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-700/40 rounded-lg"
+                          class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                         >
                           <Icon name="trash-2" size={14} />
                         </button>
@@ -528,34 +615,43 @@
               </div>
             )}
 
-            {/* Extra Income Tab */}
+            {/* TAB 3: EXTRA INCOME / SIDE HUSTLES */}
             {activeTab === 'extra' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
                   <div>
-                    <h2 class="text-sm font-bold text-slate-200">Side Hustles & Extra Income</h2>
-                    <p class="text-xs text-slate-400">Piano, Spanish, Babysitting & Gigs</p>
+                    <h2 class="text-sm font-bold text-slate-200">Side Hustles & Gigs</h2>
+                    <p class="text-xs text-slate-400">Piano, Spanish, Babysitting & Extra Income</p>
                   </div>
                   <button 
-                    onClick={addExtraIncomeItem}
-                    class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1"
+                    onClick={() => setEditModal({
+                      type: 'extra',
+                      isNew: true,
+                      item: { id: 'x_' + Date.now(), date: new Date().toISOString().split('T')[0], description: '', duration: '1h', price: 50, net: 50, status: 'Paid' }
+                    })}
+                    class="px-3.5 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-emerald-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Log Gig</span>
                   </button>
                 </div>
 
-                <div class="p-3 bg-emerald-950/30 border border-emerald-800/40 rounded-2xl flex items-center justify-between">
-                  <span class="text-xs font-bold text-emerald-300">{selectedMonth} Side Income</span>
-                  <span class="text-lg font-black text-emerald-400">£{totalExtraIncome.toFixed(2)}</span>
+                <div class="p-4 bg-emerald-950/30 border border-emerald-800/50 rounded-3xl flex items-center justify-between">
+                  <div>
+                    <span class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest block">Monthly Side Hustle Total</span>
+                    <span class="text-2xl font-black text-emerald-400">£{totalExtraIncome.toFixed(2)}</span>
+                  </div>
+                  <div class="p-3 bg-emerald-500/20 text-emerald-400 rounded-2xl">
+                    <Icon name="coins" size={24} />
+                  </div>
                 </div>
 
                 <div class="space-y-2">
                   {currentMonthObj.extraIncome.map(item => (
-                    <div key={item.id} class="p-3 bg-slate-800/80 rounded-2xl border border-slate-700/60 flex items-center justify-between">
+                    <div key={item.id} class="p-3.5 glass-card rounded-2xl flex items-center justify-between">
                       <div class="flex items-center space-x-3">
-                        <div class="p-2 bg-emerald-500/10 text-emerald-400 rounded-xl">
-                          <Icon name="briefcase" size={16} />
+                        <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-2xl border border-emerald-500/20">
+                          <Icon name="briefcase" size={18} />
                         </div>
                         <div>
                           <p class="text-xs font-bold text-slate-100">{item.description}</p>
@@ -564,16 +660,16 @@
                       </div>
 
                       <div class="flex items-center space-x-2">
-                        <span class="text-xs font-extrabold text-emerald-400">+£{Number(item.net || item.price).toFixed(2)}</span>
+                        <span class="text-xs font-black text-emerald-400">+£{Number(item.net || item.price).toFixed(2)}</span>
                         <button 
                           onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })}
-                          class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-700/40 rounded-lg"
+                          class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                         >
                           <Icon name="edit-3" size={14} />
                         </button>
                         <button 
                           onClick={() => deleteExtraIncome(item.id)}
-                          class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-700/40 rounded-lg"
+                          class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                         >
                           <Icon name="trash-2" size={14} />
                         </button>
@@ -584,60 +680,163 @@
               </div>
             )}
 
-            {/* Pots Tab */}
+            {/* TAB 4: CHILDREN'S HUB (AJ & EC) */}
+            {activeTab === 'kids' && (
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-200">Children's Finance Hub 👶</h2>
+                    <p class="text-xs text-slate-400">Child Benefit Allocations & Expense Log (AJ & EC)</p>
+                  </div>
+                  <button 
+                    onClick={() => setEditModal({
+                      type: 'kidExpense',
+                      isNew: true,
+                      item: { id: 'ke_' + Date.now(), name: '', category: 'Needs', amount: 20, child: 'AJ' }
+                    })}
+                    class="px-3.5 py-2 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-violet-600/30"
+                  >
+                    <Icon name="plus" size={14} />
+                    <span>Child Expense</span>
+                  </button>
+                </div>
+
+                {/* Total Benefit Overview Banner */}
+                <div class="p-4 rounded-3xl bg-gradient-to-tr from-violet-950/60 to-fuchsia-950/40 border border-violet-800/40 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <span class="text-[10px] font-bold text-violet-300 uppercase tracking-widest block">Monthly Child Benefit</span>
+                      <span class="text-2xl font-black text-violet-200">£{kidsSummary.totalBenefit.toFixed(2)}</span>
+                    </div>
+                    <div class="p-3 bg-violet-500/20 text-violet-300 rounded-2xl">
+                      <Icon name="baby" size={24} />
+                    </div>
+                  </div>
+
+                  {/* Allocation Pots Bar */}
+                  <div class="grid grid-cols-4 gap-1.5 pt-2 border-t border-violet-800/30 text-center">
+                    <div class="p-2 bg-slate-900/80 rounded-xl">
+                      <span class="text-[9px] text-slate-400 block">J. ISA (15%)</span>
+                      <span class="text-xs font-bold text-indigo-400">£{kidsSummary.jISA.toFixed(2)}</span>
+                    </div>
+                    <div class="p-2 bg-slate-900/80 rounded-xl">
+                      <span class="text-[9px] text-slate-400 block">Needs (30%)</span>
+                      <span class="text-xs font-bold text-emerald-400">£{kidsSummary.needs.toFixed(2)}</span>
+                    </div>
+                    <div class="p-2 bg-slate-900/80 rounded-xl">
+                      <span class="text-[9px] text-slate-400 block">Childcare (10%)</span>
+                      <span class="text-xs font-bold text-amber-400">£{kidsSummary.childcare.toFixed(2)}</span>
+                    </div>
+                    <div class="p-2 bg-slate-900/80 rounded-xl">
+                      <span class="text-[9px] text-slate-400 block">Savings (45%)</span>
+                      <span class="text-xs font-bold text-violet-400">£{kidsSummary.futurePot.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Kid Expense Items */}
+                <div class="space-y-2">
+                  <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Child Expenses Logged</h3>
+                  {(currentMonthObj.kids?.expenses || []).map(item => (
+                    <div key={item.id} class="p-3.5 glass-card rounded-2xl flex items-center justify-between">
+                      <div class="flex items-center space-x-3">
+                        <div class="p-2 bg-violet-500/10 text-violet-400 rounded-xl">
+                          <Icon name="sparkles" size={16} />
+                        </div>
+                        <div>
+                          <p class="text-xs font-bold text-slate-100">{item.name}</p>
+                          <span class="text-[10px] text-slate-400">Child: {item.child} • Category: {item.category}</span>
+                        </div>
+                      </div>
+
+                      <div class="flex items-center space-x-2">
+                        <span class="text-xs font-black text-rose-400">£{Number(item.amount).toFixed(2)}</span>
+                        <button 
+                          onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })}
+                          class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
+                        >
+                          <Icon name="edit-3" size={14} />
+                        </button>
+                        <button 
+                          onClick={() => deleteKidExpense(item.id)}
+                          class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
+                        >
+                          <Icon name="trash-2" size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* TAB 5: SAVINGS POTS */}
             {activeTab === 'pots' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                  <h2 class="text-sm font-bold text-slate-200">Savings & Emergency Pots</h2>
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-200">Savings & Emergency Pots</h2>
+                    <p class="text-xs text-slate-400">ISA, Holiday, Gift & Goal Allocations</p>
+                  </div>
                   <button 
-                    onClick={addPotItem}
-                    class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1"
+                    onClick={() => setEditModal({
+                      type: 'pot',
+                      isNew: true,
+                      item: { id: 'p_' + Date.now(), name: '', balance: 0, target: 1000, icon: 'piggy-bank' }
+                    })}
+                    class="px-3.5 py-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-indigo-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>New Pot</span>
                   </button>
                 </div>
 
-                <div class="space-y-2.5">
+                <div class="space-y-3">
                   {pots.map(pot => {
-                    const percent = Math.min(100, Math.round((pot.balance / pot.target) * 100));
+                    const percent = Math.min(100, Math.round((pot.balance / (pot.target || 1)) * 100));
                     return (
-                      <div key={pot.id} class="p-3.5 bg-slate-800/80 rounded-2xl border border-slate-700/60 space-y-2">
+                      <div key={pot.id} class="p-4 glass-card rounded-3xl space-y-2.5">
                         <div class="flex items-center justify-between">
-                          <div class="flex items-center space-x-2">
-                            <div class="p-1.5 bg-indigo-500/20 text-indigo-400 rounded-lg">
-                              <Icon name={pot.icon || 'piggy-bank'} size={16} />
+                          <div class="flex items-center space-x-2.5">
+                            <div class="p-2.5 bg-indigo-500/20 text-indigo-400 rounded-2xl">
+                              <Icon name={pot.icon || 'piggy-bank'} size={18} />
                             </div>
-                            <span class="text-xs font-bold text-slate-100">{pot.name}</span>
+                            <div>
+                              <p class="text-xs font-bold text-slate-100">{pot.name}</p>
+                              <p class="text-[10px] text-slate-400">Goal Target: £{pot.target}</p>
+                            </div>
                           </div>
                           
                           <div class="flex items-center space-x-2">
-                            <span class="text-xs font-black text-indigo-400">£{pot.balance.toFixed(2)}</span>
+                            <span class="text-sm font-black text-indigo-400">£{pot.balance.toFixed(2)}</span>
                             <button 
                               onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })}
-                              class="p-1 text-slate-400 hover:text-indigo-400"
+                              class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                             >
                               <Icon name="edit-3" size={14} />
                             </button>
                             <button 
-                              onClick={() => deletePot(pot.id)}
-                              class="p-1 text-slate-400 hover:text-rose-400"
+                              onClick={() => {
+                                if (confirm('Delete this pot?')) setPots(prev => prev.filter(p => p.id !== pot.id));
+                              }}
+                              class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                             >
                               <Icon name="trash-2" size={14} />
                             </button>
                           </div>
                         </div>
 
-                        <div class="w-full bg-slate-700/60 rounded-full h-2 overflow-hidden">
+                        {/* Progress Gauge */}
+                        <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden border border-slate-800">
                           <div 
-                            class="bg-indigo-500 h-full rounded-full transition-all duration-500" 
+                            class="bg-gradient-to-r from-indigo-500 to-violet-500 h-full rounded-full transition-all duration-700" 
                             style={{ width: `${percent}%` }}
                           ></div>
                         </div>
 
                         <div class="flex justify-between text-[10px] text-slate-400 font-medium">
                           <span>Target: £{pot.target}</span>
-                          <span>{percent}% Reached</span>
+                          <span class="font-bold text-indigo-300">{percent}% Reached</span>
                         </div>
                       </div>
                     );
@@ -646,45 +845,56 @@
               </div>
             )}
 
-            {/* Debts Tab */}
+            {/* TAB 6: DEBTS & REPAYMENTS */}
             {activeTab === 'debts' && (
               <div class="space-y-3">
                 <div class="flex items-center justify-between">
-                  <h2 class="text-sm font-bold text-slate-200">Repayments & Debt Trackers</h2>
+                  <div>
+                    <h2 class="text-sm font-bold text-slate-200">Repayments & Debt Trackers</h2>
+                    <p class="text-xs text-slate-400">Track Money Owed & Payoffs</p>
+                  </div>
                   <button 
-                    onClick={addDebtItem}
-                    class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1"
+                    onClick={() => setEditModal({
+                      type: 'debt',
+                      isNew: true,
+                      item: { id: 'd_' + Date.now(), recipient: '', total: 500, balance: 500, comments: '' }
+                    })}
+                    class="px-3.5 py-2 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 shadow-lg shadow-rose-600/30"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Debt</span>
                   </button>
                 </div>
 
-                <div class="space-y-2.5">
+                <div class="space-y-3">
                   {debts.map(debt => (
-                    <div key={debt.id} class="p-3.5 bg-slate-800/80 rounded-2xl border border-slate-700/60 space-y-1.5">
+                    <div key={debt.id} class="p-4 glass-card rounded-3xl space-y-2">
                       <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-slate-100">{debt.recipient}</span>
+                        <div>
+                          <span class="text-xs font-bold text-slate-100">{debt.recipient}</span>
+                          <p class="text-[10px] text-slate-400">{debt.comments}</p>
+                        </div>
                         <div class="flex items-center space-x-2">
-                          <span class="text-xs font-black text-rose-400">£{debt.balance.toFixed(2)} Left</span>
+                          <span class="text-sm font-black text-rose-400">£{debt.balance.toFixed(2)} Left</span>
                           <button 
                             onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })}
-                            class="p-1 text-slate-400 hover:text-indigo-400"
+                            class="p-1.5 text-slate-400 hover:text-indigo-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                           >
                             <Icon name="edit-3" size={14} />
                           </button>
                           <button 
-                            onClick={() => deleteDebt(debt.id)}
-                            class="p-1 text-slate-400 hover:text-rose-400"
+                            onClick={() => {
+                              if (confirm('Delete this debt record?')) setDebts(prev => prev.filter(d => d.id !== debt.id));
+                            }}
+                            class="p-1.5 text-slate-400 hover:text-rose-400 bg-slate-800/80 rounded-lg border border-slate-700/50"
                           >
                             <Icon name="trash-2" size={14} />
                           </button>
                         </div>
                       </div>
-                      <p class="text-[11px] text-slate-400">{debt.comments}</p>
-                      <div class="flex justify-between text-[10px] text-slate-500 pt-1 border-t border-slate-700/40">
-                        <span>Total: £{debt.total}</span>
-                        <span>Paid: £{(debt.total - debt.balance).toFixed(2)}</span>
+                      <div class="flex justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-800/80">
+                        <span>Original: £{debt.total}</span>
+                        <span>Paid Off: £{(debt.total - debt.balance).toFixed(2)}</span>
                       </div>
                     </div>
                   ))}
@@ -694,27 +904,28 @@
 
           </main>
 
-          {/* Navigation Bar */}
-          <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 p-2 z-40">
-            <div class="grid grid-cols-5 gap-1 text-center">
+          {/* Bottom Sticky Navigation */}
+          <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-slate-950/95 backdrop-blur-xl border-t border-slate-800/80 p-2 z-40">
+            <div class="grid grid-cols-6 gap-1 text-center">
               {[
                 { id: 'dashboard', label: 'Overview', icon: 'layout-dashboard' },
                 { id: 'budget', label: 'Budget', icon: 'receipt' },
                 { id: 'extra', label: 'Extra', icon: 'coins' },
+                { id: 'kids', label: 'Kids Hub', icon: 'baby' },
                 { id: 'pots', label: 'Pots', icon: 'piggy-bank' },
                 { id: 'debts', label: 'Debts', icon: 'credit-card' }
               ].map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  class={`flex flex-col items-center justify-center py-1.5 rounded-xl transition-all ${
+                  class={`flex flex-col items-center justify-center py-2 rounded-2xl transition-all duration-200 ${
                     activeTab === tab.id 
-                      ? 'text-indigo-400 font-bold bg-indigo-500/10' 
-                      : 'text-slate-400 font-medium hover:text-slate-200'
+                      ? 'text-indigo-400 font-black bg-indigo-500/10 border border-indigo-500/20' 
+                      : 'text-slate-400 font-semibold hover:text-slate-200'
                   }`}
                 >
                   <Icon name={tab.icon} size={18} />
-                  <span class="text-[10px] mt-1">{tab.label}</span>
+                  <span class="text-[9px] mt-1 tracking-tight">{tab.label}</span>
                 </button>
               ))}
             </div>
@@ -722,10 +933,10 @@
 
           {/* Universal Edit / Create Modal */}
           {editModal && (
-            <div class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
               <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-3xl p-5 space-y-4 shadow-2xl">
                 <div class="flex items-center justify-between pb-2 border-b border-slate-800">
-                  <h3 class="text-sm font-bold text-slate-100 uppercase tracking-wider">
+                  <h3 class="text-xs font-extrabold text-slate-100 uppercase tracking-widest">
                     {editModal.isNew ? 'Add' : 'Edit'} {editModal.type.toUpperCase()}
                   </h3>
                   <button onClick={() => setEditModal(null)} class="text-slate-400 hover:text-white">
@@ -739,7 +950,7 @@
                   {editModal.type === 'expense' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Name</label>
+                        <label class="text-[10px] text-slate-400 block mb-1">Expense Name</label>
                         <input 
                           type="text" 
                           required
@@ -770,14 +981,28 @@
                           />
                         </div>
                       </div>
-                      <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Due Date</label>
-                        <input 
-                          type="text" 
-                          value={editModal.item.dueDate} 
-                          onChange={(e) => setEditModal({...editModal, item: {...editModal.item, dueDate: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
-                        />
+                      <div class="grid grid-cols-2 gap-2">
+                        <div>
+                          <label class="text-[10px] text-slate-400 block mb-1">Category</label>
+                          <select 
+                            value={editModal.item.category} 
+                            onChange={(e) => setEditModal({...editModal, item: {...editModal.item, category: e.target.value}})}
+                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none"
+                          >
+                            <option value="NEEDS">NEEDS</option>
+                            <option value="WANTS">WANTS</option>
+                            <option value="SAVINGS">SAVINGS</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label class="text-[10px] text-slate-400 block mb-1">Due Date</label>
+                          <input 
+                            type="text" 
+                            value={editModal.item.dueDate} 
+                            onChange={(e) => setEditModal({...editModal, item: {...editModal.item, dueDate: e.target.value}})}
+                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          />
+                        </div>
                       </div>
                     </>
                   )}
@@ -815,6 +1040,47 @@
                             onChange={(e) => setEditModal({...editModal, item: {...editModal.item, duration: e.target.value}})}
                             class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* Kid Expense Form */}
+                  {editModal.type === 'kidExpense' && (
+                    <>
+                      <div>
+                        <label class="text-[10px] text-slate-400 block mb-1">Item Description</label>
+                        <input 
+                          type="text" 
+                          required
+                          value={editModal.item.name} 
+                          onChange={(e) => setEditModal({...editModal, item: {...editModal.item, name: e.target.value}})}
+                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                        />
+                      </div>
+                      <div class="grid grid-cols-2 gap-2">
+                        <div>
+                          <label class="text-[10px] text-slate-400 block mb-1">Amount (£)</label>
+                          <input 
+                            type="number" 
+                            step="0.01"
+                            required
+                            value={editModal.item.amount} 
+                            onChange={(e) => setEditModal({...editModal, item: {...editModal.item, amount: parseFloat(e.target.value) || 0}})}
+                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
+                          />
+                        </div>
+                        <div>
+                          <label class="text-[10px] text-slate-400 block mb-1">Child</label>
+                          <select 
+                            value={editModal.item.child} 
+                            onChange={(e) => setEditModal({...editModal, item: {...editModal.item, child: e.target.value}})}
+                            class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none"
+                          >
+                            <option value="AJ">AJ</option>
+                            <option value="EC">EC</option>
+                            <option value="Both">Both</option>
+                          </select>
                         </div>
                       </div>
                     </>
@@ -864,7 +1130,7 @@
                   {editModal.type === 'debt' && (
                     <>
                       <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Recipient / Debt Name</label>
+                        <label class="text-[10px] text-slate-400 block mb-1">Debt / Creditor Name</label>
                         <input 
                           type="text" 
                           required
@@ -886,7 +1152,7 @@
                           />
                         </div>
                         <div>
-                          <label class="text-[10px] text-slate-400 block mb-1">Remaining Balance (£)</label>
+                          <label class="text-[10px] text-slate-400 block mb-1">Balance Remaining (£)</label>
                           <input 
                             type="number" 
                             step="0.01"
@@ -896,15 +1162,6 @@
                             class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
                           />
                         </div>
-                      </div>
-                      <div>
-                        <label class="text-[10px] text-slate-400 block mb-1">Comments / Terms</label>
-                        <input 
-                          type="text" 
-                          value={editModal.item.comments} 
-                          onChange={(e) => setEditModal({...editModal, item: {...editModal.item, comments: e.target.value}})}
-                          class="w-full bg-slate-800 border border-slate-700 text-xs text-white p-2.5 rounded-xl outline-none focus:border-indigo-500" 
-                        />
                       </div>
                     </>
                   )}
@@ -919,7 +1176,7 @@
                     </button>
                     <button 
                       type="submit" 
-                      class="w-1/2 bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-xl text-xs font-bold"
+                      class="w-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-indigo-600/30"
                     >
                       Save Changes
                     </button>

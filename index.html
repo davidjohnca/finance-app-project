@@ -454,13 +454,13 @@
           {/* iOS Sticky Header with Notch Safe-Area Offset */}
           <header className={`sticky top-0 z-40 backdrop-blur-2xl border-b ${headerTheme} ios-safe-header transition-all`}>
             <div className="flex items-center justify-between mb-3 pt-1">
-              <div className="flex items-center space-x-2.5">
+              <div className="flex items-center space-x-2.5 min-w-0">
                 <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shadow-md shadow-blue-500/20 active:scale-95 transition-transform shrink-0">
                   <Icon name="wallet" size={20} />
                 </div>
-                <div>
-                  <h1 className="text-base font-black tracking-tight leading-tight">Family Budget</h1>
-                  <p className={`text-[9px] font-extrabold uppercase tracking-widest ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>MULTI-YEAR ENGINE</p>
+                <div className="min-w-0">
+                  <h1 className="text-base font-black tracking-tight leading-tight truncate">Family Budget</h1>
+                  <p className={`text-[9px] font-extrabold uppercase tracking-widest truncate ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>MULTI-YEAR ENGINE</p>
                 </div>
               </div>
               
@@ -661,10 +661,10 @@
             {/* TAB 2: BUDGET GRID */}
             {activeTab === 'budget' && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Budget vs. Actual Grid</h2>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{selectedMonth} {selectedYear} Expenses</p>
+                <div className="flex items-center justify-between min-w-0 gap-2">
+                  <div className="min-w-0">
+                    <h2 className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Budget vs. Actual Grid</h2>
+                    <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{selectedMonth} {selectedYear} Expenses</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -672,17 +672,17 @@
                       isNew: true,
                       item: { id: 'e_' + Date.now(), name: '', category: 'NEEDS', budget: 50, actual: 50, payer: 'David', dueDate: '1st', status: 'Pending' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
+                    className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20 shrink-0"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Bill</span>
                   </button>
                 </div>
 
-                <div className={`p-3 border ${cardTheme} flex justify-between text-xs font-bold items-center`}>
-                  <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Budgeted: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>£{totalBudgetedExpenses.toFixed(2)}</strong></span>
-                  <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Actual: <strong className="text-rose-500">£{totalExpenses.toFixed(2)}</strong></span>
-                  <span className={isDark ? 'text-slate-400' : 'text-slate-500'}>Variance: <strong className={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-500" : "text-rose-500"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
+                <div className={`p-3 border ${cardTheme} flex flex-wrap justify-between text-xs font-bold items-center gap-2`}>
+                  <span className={`truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Budgeted: <strong className={isDark ? 'text-slate-200' : 'text-slate-800'}>£{totalBudgetedExpenses.toFixed(2)}</strong></span>
+                  <span className={`truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Actual: <strong className="text-rose-500">£{totalExpenses.toFixed(2)}</strong></span>
+                  <span className={`truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Variance: <strong className={totalBudgetedExpenses - totalExpenses >= 0 ? "text-emerald-500" : "text-rose-500"}>£{(totalBudgetedExpenses - totalExpenses).toFixed(2)}</strong></span>
                 </div>
 
                 <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
@@ -690,9 +690,9 @@
                     const variance = Number(item.budget || 0) - Number(item.actual || 0);
 
                     return (
-                      <div key={item.id} className={`p-3.5 border ${cardTheme} space-y-2 flex flex-col justify-between`}>
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center space-x-2.5 min-w-0">
+                      <div key={item.id} className={`p-3.5 border ${cardTheme} space-y-2 flex flex-col justify-between min-w-0`}>
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <div className="flex items-center space-x-2 min-w-0 flex-1">
                             <button 
                               onClick={() => toggleExpenseStatus(item.id)}
                               className={`px-2 py-0.5 rounded-lg text-[10px] font-black uppercase transition-all active:scale-90 shrink-0 ${
@@ -706,35 +706,35 @@
                             <span className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{item.name}</span>
                           </div>
 
-                          <div className="flex items-center space-x-1.5 shrink-0">
-                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
+                          <div className="flex items-center space-x-1 shrink-0">
+                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold truncate max-w-[70px] ${
                               item.payer === 'David' ? (isDark ? 'bg-blue-500/20 text-blue-400' : 'bg-blue-100 text-blue-700') :
                               item.payer === 'May' ? (isDark ? 'bg-emerald-500/20 text-emerald-400' : 'bg-emerald-100 text-emerald-700') : 
                               isDark ? 'bg-zinc-800 text-slate-300' : 'bg-slate-200 text-slate-700'
                             }`}>
                               {item.payer}
                             </span>
-                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                            <button onClick={() => setEditModal({ type: 'expense', isNew: false, item: { ...item } })} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                               <Icon name="edit-3" size={14} />
                             </button>
-                            <button onClick={() => deleteExpense(item.id)} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
+                            <button onClick={() => deleteExpense(item.id)} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
                               <Icon name="trash-2" size={14} />
                             </button>
                           </div>
                         </div>
 
                         <div className={`grid grid-cols-3 gap-2 pt-2 border-t ${isDark ? 'border-zinc-800/80' : 'border-slate-200'} text-[10px]`}>
-                          <div>
-                            <span className={isDark ? 'text-slate-500 block' : 'text-slate-400 block'}>Budget</span>
-                            <span className={`font-bold ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>£{Number(item.budget || 0).toFixed(2)}</span>
+                          <div className="min-w-0">
+                            <span className={isDark ? 'text-slate-500 block truncate' : 'text-slate-400 block truncate'}>Budget</span>
+                            <span className={`font-bold block truncate ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>£{Number(item.budget || 0).toFixed(2)}</span>
                           </div>
-                          <div>
-                            <span className={isDark ? 'text-slate-500 block' : 'text-slate-400 block'}>Actual</span>
-                            <span className="font-black text-rose-500">£{Number(item.actual || 0).toFixed(2)}</span>
+                          <div className="min-w-0">
+                            <span className={isDark ? 'text-slate-500 block truncate' : 'text-slate-400 block truncate'}>Actual</span>
+                            <span className="font-black text-rose-500 block truncate">£{Number(item.actual || 0).toFixed(2)}</span>
                           </div>
-                          <div>
-                            <span className={isDark ? 'text-slate-500 block' : 'text-slate-400 block'}>Variance</span>
-                            <span className={`font-bold ${variance >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                          <div className="min-w-0">
+                            <span className={isDark ? 'text-slate-500 block truncate' : 'text-slate-400 block truncate'}>Variance</span>
+                            <span className={`font-bold block truncate ${variance >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
                               {variance >= 0 ? '+' : ''}£{variance.toFixed(2)}
                             </span>
                           </div>
@@ -749,10 +749,10 @@
             {/* TAB 3: EXTRA INCOME */}
             {activeTab === 'extra' && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Side Hustle Log</h2>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Piano, Spanish, Babysitting & Gigs</p>
+                <div className="flex items-center justify-between min-w-0 gap-2">
+                  <div className="min-w-0">
+                    <h2 className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Side Hustle Log</h2>
+                    <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Piano, Spanish, Babysitting & Gigs</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -760,17 +760,17 @@
                       isNew: true,
                       item: { id: 'x_' + Date.now(), date: new Date().toISOString().split('T')[0], description: '', duration: '1h', price: 50, net: 50, status: 'Paid' }
                     })}
-                    className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-emerald-500/20"
+                    className="px-3 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-emerald-500/20 shrink-0"
                   >
                     <Icon name="plus" size={14} />
                     <span>Log Gig</span>
                   </button>
                 </div>
 
-                <div className={`p-4.5 border ${isDark ? 'bg-emerald-950/20 border-emerald-800/40 rounded-[22px]' : 'bg-emerald-50 border-emerald-200 rounded-[22px]'} flex items-center justify-between`}>
-                  <div>
-                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block">Monthly Side Hustles</span>
-                    <span className="text-2xl font-black text-emerald-500">£{totalExtraIncome.toFixed(2)}</span>
+                <div className={`p-4.5 border ${isDark ? 'bg-emerald-950/20 border-emerald-800/40 rounded-[22px]' : 'bg-emerald-50 border-emerald-200 rounded-[22px]'} flex items-center justify-between min-w-0 gap-3`}>
+                  <div className="min-w-0 flex-1">
+                    <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest block truncate">Monthly Side Hustles</span>
+                    <span className="text-2xl font-black text-emerald-500 block truncate">£{totalExtraIncome.toFixed(2)}</span>
                   </div>
                   <div className="w-11 h-11 bg-emerald-500/20 text-emerald-500 rounded-2xl flex items-center justify-center shrink-0">
                     <Icon name="coins" size={24} />
@@ -779,23 +779,23 @@
 
                 <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {currentMonthObj.extraIncome.map(item => (
-                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between gap-2`}>
-                      <div className="flex items-center space-x-3 min-w-0">
+                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between gap-2 min-w-0`}>
+                      <div className="flex items-center space-x-3 min-w-0 flex-1">
                         <div className="w-9 h-9 bg-emerald-500/10 text-emerald-500 rounded-2xl border border-emerald-500/20 flex items-center justify-center shrink-0">
                           <Icon name="briefcase" size={18} />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{item.description}</p>
                           <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{item.date} • {item.duration || 'Session'}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-2 shrink-0">
-                        <span className="text-xs font-black text-emerald-500">+£{Number(item.net || item.price).toFixed(2)}</span>
-                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                      <div className="flex items-center space-x-1.5 shrink-0">
+                        <span className="text-xs font-black text-emerald-500 truncate">+£{Number(item.net || item.price).toFixed(2)}</span>
+                        <button onClick={() => setEditModal({ type: 'extra', isNew: false, item: { ...item } })} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                           <Icon name="edit-3" size={14} />
                         </button>
-                        <button onClick={() => deleteExtraIncome(item.id)} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
+                        <button onClick={() => deleteExtraIncome(item.id)} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-rose-400' : 'text-slate-500 hover:text-rose-600'}`}>
                           <Icon name="trash-2" size={14} />
                         </button>
                       </div>
@@ -808,10 +808,10 @@
             {/* TAB 4: KIDS HUB */}
             {activeTab === 'kids' && (
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Children's Finance Hub 👶</h2>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Child Benefit & Expense Allocations</p>
+                <div className="flex items-center justify-between min-w-0 gap-2">
+                  <div className="min-w-0">
+                    <h2 className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Children's Finance Hub 👶</h2>
+                    <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Child Benefit & Expense Allocations</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -819,25 +819,25 @@
                       isNew: true,
                       item: { id: 'ke_' + Date.now(), name: '', category: 'Needs', amount: 20, child: 'AJ' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
+                    className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20 shrink-0"
                   >
                     <Icon name="plus" size={14} />
                     <span>Child Expense</span>
                   </button>
                 </div>
 
-                <div className={`p-4.5 border ${isDark ? 'bg-blue-950/20 border-blue-800/30 rounded-[22px]' : 'bg-blue-50 border-blue-200 rounded-[22px]'} space-y-3`}>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <span className={`text-[10px] font-bold uppercase tracking-widest block ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Monthly Child Benefit</span>
-                      <span className={`text-2xl font-black ${isDark ? 'text-blue-200' : 'text-blue-900'}`}>£{kidsSummary.totalBenefit.toFixed(2)}</span>
+                <div className={`p-4.5 border ${isDark ? 'bg-blue-950/20 border-blue-800/30 rounded-[22px]' : 'bg-blue-50 border-blue-200 rounded-[22px]'} space-y-3 min-w-0`}>
+                  <div className="flex items-center justify-between gap-3 min-w-0">
+                    <div className="min-w-0 flex-1">
+                      <span className={`text-[10px] font-bold uppercase tracking-widest block truncate ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Monthly Child Benefit</span>
+                      <span className={`text-2xl font-black block truncate ${isDark ? 'text-blue-200' : 'text-blue-900'}`}>£{kidsSummary.totalBenefit.toFixed(2)}</span>
                     </div>
                     <div className="w-11 h-11 bg-blue-500/20 text-blue-500 rounded-2xl flex items-center justify-center shrink-0">
                       <Icon name="baby" size={24} />
                     </div>
                   </div>
 
-                  <div className={`grid grid-cols-4 gap-2 pt-2 border-t ${isDark ? 'border-blue-900/40' : 'border-blue-200'} text-center`}>
+                  <div className={`grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t ${isDark ? 'border-blue-900/40' : 'border-blue-200'} text-center`}>
                     <div className={`p-2 rounded-2xl ${isDark ? 'bg-zinc-900/80' : 'bg-white shadow-sm'} flex flex-col items-center justify-center min-w-0`}>
                       <span className={`text-[9px] block truncate w-full ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>J. ISA (15%)</span>
                       <span className="text-xs font-bold text-blue-500 truncate w-full">£{kidsSummary.jISA.toFixed(2)}</span>
@@ -859,19 +859,19 @@
 
                 <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {(currentMonthObj.kids?.expenses || []).map(item => (
-                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between gap-2`}>
-                      <div className="flex items-center space-x-3 min-w-0">
+                    <div key={item.id} className={`p-3.5 border ${cardTheme} flex items-center justify-between gap-2 min-w-0`}>
+                      <div className="flex items-center space-x-3 min-w-0 flex-1">
                         <div className="w-8 h-8 bg-blue-500/10 text-blue-500 rounded-xl flex items-center justify-center shrink-0">
                           <Icon name="sparkles" size={16} />
                         </div>
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{item.name}</p>
                           <span className={`text-[10px] truncate block ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Child: {item.child} • {item.category}</span>
                         </div>
                       </div>
 
                       <div className="flex items-center space-x-2 shrink-0">
-                        <span className="text-xs font-black text-rose-500">£{Number(item.amount).toFixed(2)}</span>
+                        <span className="text-xs font-black text-rose-500 truncate">£{Number(item.amount).toFixed(2)}</span>
                         <button onClick={() => setEditModal({ type: 'kidExpense', isNew: false, item: { ...item } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                           <Icon name="edit-3" size={14} />
                         </button>
@@ -885,10 +885,10 @@
             {/* TAB 5: POTS */}
             {activeTab === 'pots' && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Savings Pots</h2>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Emergency, ISA & Goals</p>
+                <div className="flex items-center justify-between min-w-0 gap-2">
+                  <div className="min-w-0">
+                    <h2 className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Savings Pots</h2>
+                    <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Emergency, ISA & Goals</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -896,7 +896,7 @@
                       isNew: true,
                       item: { id: 'p_' + Date.now(), name: '', balance: 0, target: 1000, icon: 'piggy-bank' }
                     })}
-                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20"
+                    className="px-3 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-blue-500/20 shrink-0"
                   >
                     <Icon name="plus" size={14} />
                     <span>New Pot</span>
@@ -907,21 +907,21 @@
                   {pots.map(pot => {
                     const percent = Math.min(100, Math.round((pot.balance / (pot.target || 1)) * 100));
                     return (
-                      <div key={pot.id} className={`p-4 border ${cardTheme} space-y-2.5 flex flex-col justify-between`}>
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center space-x-2.5 min-w-0">
+                      <div key={pot.id} className={`p-4 border ${cardTheme} space-y-2.5 flex flex-col justify-between min-w-0`}>
+                        <div className="flex items-center justify-between gap-2 min-w-0">
+                          <div className="flex items-center space-x-2.5 min-w-0 flex-1">
                             <div className="w-9 h-9 bg-blue-500/10 text-blue-500 rounded-2xl flex items-center justify-center shrink-0">
                               <Icon name={pot.icon || 'piggy-bank'} size={18} />
                             </div>
-                            <div className="min-w-0">
+                            <div className="min-w-0 flex-1">
                               <p className={`text-xs font-bold truncate ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{pot.name}</p>
                               <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Goal: £{pot.target}</p>
                             </div>
                           </div>
                           
-                          <div className="flex items-center space-x-2 shrink-0">
-                            <span className="text-sm font-black text-blue-500">£{pot.balance.toFixed(2)}</span>
-                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                          <div className="flex items-center space-x-1.5 shrink-0">
+                            <span className="text-sm font-black text-blue-500 truncate">£{pot.balance.toFixed(2)}</span>
+                            <button onClick={() => setEditModal({ type: 'pot', isNew: false, item: { ...pot } })} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                               <Icon name="edit-3" size={14} />
                             </button>
                           </div>
@@ -931,9 +931,9 @@
                           <div className="bg-blue-600 h-full rounded-full transition-all duration-700" style={{ width: `${percent}%` }}></div>
                         </div>
 
-                        <div className={`flex justify-between text-[10px] font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
-                          <span>Target: £{pot.target}</span>
-                          <span className={`font-bold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{percent}% Reached</span>
+                        <div className={`flex justify-between text-[10px] font-medium min-w-0 gap-2 ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                          <span className="truncate">Target: £{pot.target}</span>
+                          <span className={`font-bold shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{percent}% Reached</span>
                         </div>
                       </div>
                     );
@@ -945,10 +945,10 @@
             {/* TAB 6: DEBTS */}
             {activeTab === 'debts' && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h2 className={`text-sm font-bold ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Debt Repayments</h2>
-                    <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Monteflor, Tita Norie, Clarence</p>
+                <div className="flex items-center justify-between min-w-0 gap-2">
+                  <div className="min-w-0">
+                    <h2 className={`text-sm font-bold truncate ${isDark ? 'text-slate-200' : 'text-slate-800'}`}>Debt Repayments</h2>
+                    <p className={`text-xs truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>Monteflor, Tita Norie, Clarence</p>
                   </div>
                   <button 
                     onClick={() => setEditModal({
@@ -956,7 +956,7 @@
                       isNew: true,
                       item: { id: 'd_' + Date.now(), recipient: '', total: 500, balance: 500, comments: '' }
                     })}
-                    className="px-3.5 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-rose-500/20"
+                    className="px-3 py-2 bg-rose-600 hover:bg-rose-500 text-white rounded-xl text-xs font-bold flex items-center space-x-1 active:scale-95 transition-all shadow-md shadow-rose-500/20 shrink-0"
                   >
                     <Icon name="plus" size={14} />
                     <span>Add Debt</span>
@@ -965,22 +965,22 @@
 
                 <div className="grid grid-cols-1 landscape:grid-cols-2 md:grid-cols-2 gap-3">
                   {debts.map(debt => (
-                    <div key={debt.id} className={`p-4 border ${cardTheme} space-y-2 flex flex-col justify-between`}>
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="min-w-0">
+                    <div key={debt.id} className={`p-4 border ${cardTheme} space-y-2 flex flex-col justify-between min-w-0`}>
+                      <div className="flex items-center justify-between gap-2 min-w-0">
+                        <div className="min-w-0 flex-1">
                           <span className={`text-xs font-bold truncate block ${isDark ? 'text-slate-100' : 'text-slate-800'}`}>{debt.recipient}</span>
                           <p className={`text-[10px] truncate ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>{debt.comments}</p>
                         </div>
-                        <div className="flex items-center space-x-2 shrink-0">
-                          <span className="text-sm font-black text-rose-500">£{debt.balance.toFixed(2)} Left</span>
-                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} className={`p-1.5 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
+                        <div className="flex items-center space-x-1.5 shrink-0">
+                          <span className="text-sm font-black text-rose-500 truncate">£{debt.balance.toFixed(2)} Left</span>
+                          <button onClick={() => setEditModal({ type: 'debt', isNew: false, item: { ...debt } })} className={`p-1 active:scale-90 ${isDark ? 'text-slate-400 hover:text-blue-400' : 'text-slate-500 hover:text-blue-600'}`}>
                             <Icon name="edit-3" size={14} />
                           </button>
                         </div>
                       </div>
-                      <div className={`flex justify-between text-[10px] pt-2 border-t ${isDark ? 'text-slate-500 border-zinc-800/80' : 'text-slate-400 border-slate-200'}`}>
-                        <span>Original: £{debt.total}</span>
-                        <span>Paid: £{(debt.total - debt.balance).toFixed(2)}</span>
+                      <div className={`flex justify-between text-[10px] pt-2 border-t min-w-0 gap-2 ${isDark ? 'text-slate-500 border-zinc-800/80' : 'text-slate-400 border-slate-200'}`}>
+                        <span className="truncate">Original: £{debt.total}</span>
+                        <span className="truncate">Paid: £{(debt.total - debt.balance).toFixed(2)}</span>
                       </div>
                     </div>
                   ))}
@@ -1011,7 +1011,7 @@
                   }`}
                 >
                   <Icon name={tab.icon} size={18} />
-                  <span className="text-[9px] mt-1 tracking-tight">{tab.label}</span>
+                  <span className="text-[9px] mt-1 tracking-tight truncate w-full px-0.5">{tab.label}</span>
                 </button>
               ))}
             </div>
@@ -1022,7 +1022,7 @@
             <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
               <div className={`w-full max-w-sm rounded-[28px] p-5 space-y-4 shadow-2xl border ${isDark ? 'bg-zinc-900 border-zinc-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'}`}>
                 <div className={`flex items-center justify-between pb-2 border-b ${isDark ? 'border-zinc-800' : 'border-slate-200'}`}>
-                  <h3 className="text-xs font-extrabold uppercase tracking-widest">
+                  <h3 className="text-xs font-extrabold uppercase tracking-widest truncate">
                     {editModal.isNew ? 'Add' : 'Edit'} {editModal.type.toUpperCase()}
                   </h3>
                   <button onClick={() => setEditModal(null)} className={isDark ? "text-slate-400 hover:text-white" : "text-slate-500 hover:text-black"}>
